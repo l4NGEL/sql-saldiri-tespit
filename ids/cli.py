@@ -43,6 +43,7 @@ def main() -> None:
     s.add_argument("--port", type=int, default=8000)
 
     sub.add_parser("make-sample", help="Tam CSV'lerden küçük, etiket-tabakalı örnek üret")
+    sub.add_parser("demo-data", help="Arayüz için test bölümünden örnek akışlar (data/demo/flows.json)")
 
     args = p.parse_args()
     if args.db:
@@ -75,6 +76,9 @@ def main() -> None:
     elif args.cmd == "serve":
         import uvicorn
         uvicorn.run("ids.api:app", host=args.host, port=args.port)
+    elif args.cmd == "demo-data":
+        from . import demo
+        demo.run()
     elif args.cmd == "make-sample":
         from . import sample
         sample.run()

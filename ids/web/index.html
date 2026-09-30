@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ağ Saldırısı Tespiti</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #6f6d68;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834;
+  --attack: #d03b3b; --attack-ink: #b3261e; --attack-wash: #fbeaea;
+  --benign: #0ca30c; --benign-ink: #006300; --benign-wash: #e8f5e8;
+  --toward-attack: #e34948; --toward-benign: #2a78d6;
+  --focus: #2a78d6;
+  --radius: 10px;
+  --mono: ui-monospace, "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a988f;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926;
+    --attack: #e66767; --attack-ink: #ff8a80; --attack-wash: #3a1b1b;
+    --benign: #0ca30c; --benign-ink: #4cc94c; --benign-wash: #15301a;
+    --toward-attack: #e66767; --toward-benign: #3987e5;
+    --focus: #6da7ec;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #9a988f;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926;
+  --attack: #e66767; --attack-ink: #ff8a80; --attack-wash: #3a1b1b;
+  --benign: #0ca30c; --benign-ink: #4cc94c; --benign-wash: #15301a;
+  --toward-attack: #e66767; --toward-benign: #3987e5;
+  --focus: #6da7ec;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+button, textarea, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.head { display: flex; align-items: center; gap: 16px; padding: 14px 0; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+.brand svg { color: var(--s1); }
+.brand h1 { font-size: 17px; margin: 0; font-weight: 650; }
+.brand p { margin: 0; font-size: 13px; color: var(--ink-2); }
+.chip { font-size: 12.5px; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.iconbtn { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
+  border-radius: 8px; border: 1px solid var(--border); background: var(--surface); }
+.iconbtn:hover { background: var(--surface-2); }
+nav[role=tablist] { display: flex; gap: 4px; }
+nav[role=tablist] button { border: 0; background: none; padding: 12px 14px; border-bottom: 2px solid transparent;
+  color: var(--ink-2); font-weight: 550; }
+nav[role=tablist] button[aria-selected=true] { color: var(--ink); border-bottom-color: var(--s1); }
+nav[role=tablist] button:hover { color: var(--ink); }
+main.wrap { padding-top: 20px; padding-bottom: 48px; }
+[role=tabpanel][hidden] { display: none; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.pad { padding: 18px; }
+h2 { font-size: 16px; margin: 0 0 4px; font-weight: 650; }
+h3 { font-size: 14px; margin: 0 0 10px; font-weight: 650; }
+.sub { color: var(--ink-2); font-size: 13.5px; margin: 0 0 14px; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* canlı tahmin */
+.toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; padding: 7px 12px; min-height: 36px; color: var(--ink-2); }
+.seg button[aria-pressed=true] { background: var(--surface-2); color: var(--ink); font-weight: 600; }
+.btn { border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 7px 14px; min-height: 36px; }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--s1); border-color: var(--s1); color: #fff; font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.score { margin-left: auto; font-size: 13.5px; color: var(--ink-2); }
+.grid2 { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 16px; align-items: start; }
+.list { max-height: calc(100vh - 210px); overflow: auto; padding: 6px; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; width: 100%; text-align: left;
+  border: 1px solid transparent; background: none; border-radius: 8px; padding: 9px 10px; }
+.item:hover { background: var(--surface-2); }
+.item[aria-current=true] { background: var(--surface-2); border-color: var(--border); }
+.item .lbl { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 7px; min-width: 0; }
+.item .lbl span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .meta { grid-column: 1; font-size: 12.5px; color: var(--muted); }
+.item .res { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.dot.attack { background: var(--attack); } .dot.benign { background: var(--benign); }
+.ok { color: var(--benign-ink); } .bad { color: var(--attack-ink); }
+
+.detail { display: grid; gap: 16px; }
+.dhead { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+.truth { font-size: 13px; color: var(--ink-2); }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px;
+  font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.badge.attack { background: var(--attack-wash); color: var(--attack-ink); }
+.badge.benign { background: var(--benign-wash); color: var(--benign-ink); }
+.prob { display: flex; align-items: baseline; gap: 10px; margin: 14px 0 8px; }
+.prob b { font-size: 34px; line-height: 1; font-weight: 700; }
+.meter { position: relative; height: 12px; background: var(--surface-2); border-radius: 6px; border: 1px solid var(--border); }
+.meter .fill { position: absolute; inset: 0 auto 0 0; border-radius: 6px; transition: width .35s ease; }
+.meter .thr { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--ink); }
+.meter-scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; position: relative; }
+.thr-label { position: absolute; transform: translateX(-50%); white-space: nowrap; color: var(--ink-2); }
+.verdict { margin-top: 12px; font-size: 14px; display: flex; gap: 8px; align-items: center; }
+.note { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+
+.contrib { display: grid; gap: 8px; }
+.crow { display: grid; grid-template-columns: minmax(150px, 1.1fr) 1.4fr 58px; gap: 10px; align-items: center; }
+.crow .name { font-size: 13.5px; line-height: 1.3; }
+.crow .name small { display: block; color: var(--muted); font-size: 12px; }
+.tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--ink-2); margin-left: 4px; }
+.tag.sql { border-color: var(--s1); color: var(--s1); }
+.dbar { position: relative; height: 16px; }
+.dbar .mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.dbar .b { position: absolute; top: 2px; bottom: 2px; }
+.dbar .b.pos { left: 50%; background: var(--toward-attack); border-radius: 0 4px 4px 0; }
+.dbar .b.neg { right: 50%; background: var(--toward-benign); border-radius: 4px 0 0 4px; }
+.crow .v { text-align: right; font-size: 12.5px; }
+.clegend { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+.clegend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.fact { background: var(--surface-2); border-radius: 8px; padding: 9px 11px; }
+.fact div { font-size: 12px; color: var(--muted); }
+.fact b { font-size: 15px; font-weight: 600; }
+details.edit summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+textarea { width: 100%; min-height: 260px; margin-top: 10px; padding: 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface-2); font-family: var(--mono); font-size: 12.5px; }
+.err { color: var(--attack-ink); font-size: 13px; white-space: pre-wrap; margin-top: 8px; }
+
+/* sonuçlar */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi .v { font-size: 30px; font-weight: 700; line-height: 1.1; margin: 4px 0; }
+.kpi .l { font-size: 13px; color: var(--ink-2); }
+.kpi .d { font-size: 12.5px; color: var(--muted); }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 16px; }
+.legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--ink-2); margin-bottom: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hbars { display: grid; gap: 10px; }
+.hrow { display: grid; grid-template-columns: 170px 1fr; gap: 10px; align-items: center; }
+.hrow .rl { font-size: 13px; line-height: 1.25; }
+.hrow .rl small { display: block; color: var(--muted); font-size: 11.5px; }
+.pair { display: grid; gap: 2px; }
+.track { position: relative; height: 13px; display: flex; align-items: center; padding-right: 52px; }
+.track .bar { flex: none; height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; }
+.track .val { position: absolute; left: calc((100% - 52px) * var(--f) + 6px); font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.axis { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-left: 180px; margin-right: 52px; border-top: 1px solid var(--axis); padding-top: 4px; margin-top: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--grid); }
+th { color: var(--ink-2); font-weight: 600; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+details.tbl { margin-top: 12px; font-size: 13px; }
+details.tbl summary { cursor: pointer; color: var(--ink-2); }
+.callout { border-left: 3px solid var(--s2); padding: 8px 12px; background: var(--surface-2); border-radius: 0 8px 8px 0; font-size: 13.5px; color: var(--ink-2); margin-top: 12px; }
+
+/* nasıl çalışıyor */
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; counter-reset: s; }
+.step { position: relative; padding: 14px; }
+.step .k { font-size: 12px; color: var(--muted); font-weight: 600; }
+.step b { display: block; font-size: 15px; margin: 2px 0 6px; }
+.step p { margin: 0; font-size: 13px; color: var(--ink-2); }
+.step .big { font-size: 20px; font-weight: 700; margin-top: 8px; }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--page); font-size: 12.5px;
+  padding: 6px 9px; border-radius: 6px; max-width: 280px; z-index: 10; opacity: 0; transition: opacity .12s; }
+.tip.on { opacity: 1; }
+.empty { padding: 40px; text-align: center; color: var(--muted); }
+@media (max-width: 860px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .list { max-height: 320px; }
+  .charts { grid-template-columns: 1fr; }
+  .crow { grid-template-columns: 1fr 1fr 50px; }
+  .hrow { grid-template-columns: 110px 1fr; }
+  .axis { margin-left: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="head">
+      <div class="brand">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z"/><path d="M8 12h2l1.5-3 2 6 1.5-3h1"/></svg>
+        <div>
+          <h1>Ağ Saldırısı Tespiti</h1>
+          <p>CSE-CIC-IDS2018 · PostgreSQL + SQL özellikleri + LightGBM</p>
+        </div>
+      </div>
+      <span class="chip" id="modelChip">model yükleniyor…</span>
+      <button class="iconbtn" id="themeBtn" aria-label="Açık/koyu tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+      </button>
+    </div>
+    <nav role="tablist" aria-label="Bölümler">
+      <button role="tab" id="tab-live" aria-controls="p-live" aria-selected="true">Canlı tahmin</button>
+      <button role="tab" id="tab-results" aria-controls="p-results" aria-selected="false" tabindex="-1">Sonuçlar</button>
+      <button role="tab" id="tab-how" aria-controls="p-how" aria-selected="false" tabindex="-1">Nasıl çalışıyor</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- CANLI TAHMİN -->
+  <section role="tabpanel" id="p-live" aria-labelledby="tab-live">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Filtre">
+        <button aria-pressed="true" data-f="all">Tümü</button>
+        <button aria-pressed="false" data-f="attack">Saldırı</button>
+        <button aria-pressed="false" data-f="benign">Normal</button>
+        <button aria-pressed="false" data-f="wrong">Model yanıldı</button>
+      </div>
+      <button class="btn" id="randomBtn">Rastgele akış</button>
+      <span class="score" id="score" aria-live="polite"></span>
+    </div>
+    <div class="grid2">
+      <div class="card list" id="list" role="listbox" aria-label="Örnek akışlar"></div>
+      <div class="detail" id="detail"><div class="card empty">Soldan bir akış seçin.</div></div>
+    </div>
+  </section>
+
+  <!-- SONUÇLAR -->
+  <section role="tabpanel" id="p-results" aria-labelledby="tab-results" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="charts">
+      <div class="card pad"><h2>Yöntem karşılaştırması</h2><p class="sub">Kronolojik ayrımın test bölümü (2,8 M akış); eşik doğrulamada seçildi.</p><div id="c-methods"></div></div>
+      <div class="card pad"><h2>Görülmemiş güne genelleme</h2><p class="sub">Her satırda o gün (ve senaryosu) eğitimden tamamen çıkarıldı.</p><div id="c-lodo"></div></div>
+      <div class="card pad"><h2>Saldırı türüne göre yakalama oranı</h2><p class="sub">LightGBM, kronolojik test; normal trafik satırı yanlış alarm oranıdır.</p><div id="c-labels"></div></div>
+      <div class="card pad"><h2>SQL özelliklerinin katkısı (ablasyon)</h2><p class="sub">Aynı model, farklı özellik kümeleri, 3 M eğitim satırı.</p><div id="c-ablation"></div></div>
+    </div>
+  </section>
+
+  <!-- NASIL ÇALIŞIYOR -->
+  <section role="tabpanel" id="p-how" aria-labelledby="tab-how" hidden>
+    <div class="card pad" style="margin-bottom:16px">
+      <h2>Veri hattı</h2>
+      <p class="sub">Tüm dönüşümler <span class="mono">sql/</span> altındaki SQL dosyalarında; Python yalnızca SQL'i çalıştırır ve modeli eğitir.</p>
+      <div class="flow">
+        <div class="card step"><div class="k">1 · İçe aktarma</div><b>CSV → raw.flows</b><p>10 CSV satır akışıyla okunur, COPY ile güne göre bölümlü tabloya yazılır.</p><div class="big num">16.232.943</div><div class="muted" style="font-size:12px">ham akış</div></div>
+        <div class="card step"><div class="k">2 · Denetim + temizlik</div><b>raw → clean.flows</b><p>12 saatlik saat düzeltmesi, tekrar ve çelişkili etiketler, Infinity/NaN.</p><div class="big num">15.809.010</div><div class="muted" style="font-size:12px">temiz akış</div></div>
+        <div class="card step"><div class="k">3 · SQL özellikleri</div><b>features.flow_features</b><p>12 oran + 8 zaman penceresi (yalnızca akış bitmeden önce görülenler).</p><div class="big num">+20</div><div class="muted" style="font-size:12px">özellik</div></div>
+        <div class="card step"><div class="k">4 · Ayrım</div><b>train / val / test</b><p>Her saldırı patlaması zamanla bölünür; test her zaman aynı saldırının ileriki dakikaları.</p><div class="big num">26</div><div class="muted" style="font-size:12px">saldırı patlaması</div></div>
+        <div class="card step"><div class="k">5 · Model</div><b>LightGBM</b><p>Eşik doğrulamada seçilir; test yalnızca raporlama için.</p><div class="big num">90</div><div class="muted" style="font-size:12px">özellik</div></div>
+        <div class="card step"><div class="k">6 · Servis</div><b>FastAPI</b><p>Bu sayfa: <span class="mono">/predict</span>, <span class="mono">/explain</span>, <span class="mono">/results</span>.</p><div class="big num">~5 ms</div><div class="muted" style="font-size:12px">uçtan uca yanıt</div></div>
+      </div>
+    </div>
+    <div class="charts">
+      <div class="card pad">
+        <h2>Bir tahmin nasıl açıklanıyor</h2>
+        <p class="sub">"Canlı tahmin" sekmesindeki çubuklar LightGBM'in özellik katkılarıdır (TreeSHAP, log-odds). Kırmızı çubuk kararı saldırıya, mavi çubuk normale iter. <span class="tag sql">SQL</span> etiketli özellikler bu projede SQL ile üretildi.</p>
+        <p class="sub">Hacim saldırılarında (DoS/DDoS) kararı çoğunlukla "aynı porta son 60 saniyede biten akış sayısı" gibi pencere özellikleri belirler; tek bir akışın kendi ölçümleri çoğu zaman sıradan görünür.</p>
+      </div>
+      <div class="card pad">
+        <h2>Bu sonuçları nasıl okumalı</h2>
+        <p class="sub">Ana test, modelin tanıdığı bir saldırıyı başladıktan birkaç dakika sonra yakalayıp yakalayamadığını ölçer ve çok yüksek çıkar. Hiç görülmemiş bir günde başarı belirgin biçimde düşer (medyan recall 0,25). Veri laboratuvarda üretilmiştir; bu sayılar gerçek bir ağdaki performansı göstermez.</p>
+        <p class="sub">Örnek akışlar test bölümünden hash sırasıyla seçildi, elle ayıklanmadı: modelin yanıldığı akışlar da listede.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const fmt = (x, d = 3) => x == null ? "—" : Number(x).toLocaleString("tr-TR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const int = x => x == null ? "—" : Math.round(x).toLocaleString("tr-TR");
+const pct = (x, d = 1) => x == null ? "—" : "%" + (x * 100).toLocaleString("tr-TR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const PROTO = { 0: "diğer", 6: "TCP", 17: "UDP" };
+const LABEL_TR = { "Benign": "Normal trafik", "Infilteration": "Infiltration" };
+const labelName = l => LABEL_TR[l] || l;
+const SHORT = { "Brute Force -Web": "Web BF", "Brute Force -XSS": "XSS", "SQL Injection": "SQLi", "FTP-BruteForce": "FTP BF", "SSH-Bruteforce": "SSH BF" };
+const shortName = l => SHORT[l] || labelName(l).replace(/^(DoS attacks-|DDoS attacks-|DDOS attack-)/, "");
+const METHOD_TR = { majority: "Çoğunluk sınıfı", rule_w60_port_n: "Hız kuralı", logreg: "Lojistik regresyon", lightgbm: "LightGBM" };
+const ICON_OK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+const ICON_BAD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+const ICON_ALERT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>';
+const ICON_SHIELD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z"/></svg>';
+
+// ---- tema ----
+(function theme() {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("ids-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  $("#themeBtn").addEventListener("click", () => {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("ids-theme", root.dataset.theme); } catch (e) {}
+  });
+})();
+
+// ---- sekmeler ----
+const tabs = [...document.querySelectorAll("[role=tab]")];
+function selectTab(t) {
+  tabs.forEach(x => { const on = x === t; x.setAttribute("aria-selected", on); x.tabIndex = on ? 0 : -1;
+    $("#" + x.getAttribute("aria-controls")).hidden = !on; });
+  if (t.id === "tab-results") loadResults();
+  try { history.replaceState(null, "", "#" + t.id.slice(4)); } catch (e) {}
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => selectTab(t));
+  t.addEventListener("keydown", e => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); selectTab(n);
+  });
+});
+
+// ---- ipucu ----
+const tip = $("#tip");
+document.addEventListener("pointerover", e => { const el = e.target.closest("[data-tip]"); if (!el) return;
+  tip.textContent = el.dataset.tip; tip.classList.add("on"); });
+document.addEventListener("pointermove", e => { if (!tip.classList.contains("on")) return;
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); tip.style.left = x + "px"; tip.style.top = (e.clientY + 14) + "px"; });
+document.addEventListener("pointerout", e => { if (e.target.closest("[data-tip]")) tip.classList.remove("on"); });
+
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) { const err = new Error("HTTP " + r.status); err.detail = data.detail; throw err; }
+  return data;
+}
+
+// ---- canlı tahmin ----
+let flows = [], card = null, filter = "all", current = null;
+const preds = new Map();
+
+async function init() {
+  try {
+    card = await api("/model");
+    $("#modelChip").textContent = `${card.model === "lightgbm" ? "LightGBM" : card.model} · ${card.features.length} özellik · eşik ${fmt(card.threshold, 3)}`;
+  } catch (e) { $("#modelChip").textContent = "model bulunamadı"; }
+  try { flows = (await api("/examples")).flows; }
+  catch (e) { $("#list").innerHTML = '<div class="empty">Örnek akış yok. <span class="mono">python -m ids demo-data</span></div>'; return; }
+  renderList();
+  const first = flows.find(f => f.label === "DoS attacks-Hulk") || flows[0];
+  select(first.id);
+  // tüm örnekleri puanla (listede modelin kararı görünsün)
+  for (const f of flows) {
+    try { preds.set(f.id, await api("/predict", { flow: f.flow, window: f.window })); } catch (e) {}
+  }
+  renderList(); renderScore();
+}
+
+function correct(f) { const p = preds.get(f.id); return p ? (p.decision === "ATTACK") === f.is_attack : null; }
+function renderScore() {
+  const done = flows.filter(f => preds.has(f.id)); const ok = done.filter(correct).length;
+  $("#score").textContent = `${flows.length} örnek akış · model ${ok}/${done.length} akışı doğru sınıfladı`;
+}
+function visible() {
+  return flows.filter(f => filter === "all" || (filter === "attack" && f.is_attack) || (filter === "benign" && !f.is_attack)
+    || (filter === "wrong" && correct(f) === false));
+}
+function renderList() {
+  const v = visible();
+  $("#list").innerHTML = v.length ? v.map(f => {
+    const c = correct(f);
+    const res = c == null ? '<span class="muted">…</span>'
+      : c ? `<span class="ok">${ICON_OK}doğru</span>` : `<span class="bad">${ICON_BAD}yanıldı</span>`;
+    return `<button class="item" role="option" data-id="${f.id}" aria-current="${f.id === current}">
+      <span class="lbl"><i class="dot ${f.is_attack ? "attack" : "benign"}" aria-hidden="true"></i><span>${esc(labelName(f.label))}</span></span>
+      <span class="res">${res}</span>
+      <span class="meta num">${f.day.slice(8, 10)}.${f.day.slice(5, 7)} ${f.ts.slice(11, 19)} · port ${f.flow.dst_port} · ${PROTO[f.flow.protocol]}</span>
+    </button>`; }).join("") : '<div class="empty">Bu filtrede akış yok.</div>';
+}
+$("#list").addEventListener("click", e => { const b = e.target.closest(".item"); if (b) select(Number(b.dataset.id)); });
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderList();
+}));
+$("#randomBtn").addEventListener("click", () => { const v = visible(); if (v.length) select(v[Math.floor(Math.random() * v.length)].id); });
+
+async function select(id) {
+  current = id; renderList();
+  const f = flows.find(x => x.id === id);
+  await explainAndRender(f, { flow: f.flow, window: f.window });
+}
+
+async function explainAndRender(f, body) {
+  const d = $("#detail");
+  let ex;
+  try { ex = await api("/explain?top=8", body); }
+  catch (e) { renderError(f, body, e); return; }
+  const isAtk = ex.decision === "ATTACK";
+  const right = f ? isAtk === f.is_attack : null;
+  const maxC = Math.max(...ex.top.map(t => Math.abs(t.contribution)), 1e-9);
+  const w = body.window, fl = body.flow;
+  d.innerHTML = `
+    <div class="card pad">
+      <div class="dhead">
+        <div>
+          <h2>${f ? esc(labelName(f.label)) : "Düzenlenmiş istek"}</h2>
+          <div class="truth">${f ? `Gerçek etiket · ${f.day.split("-").reverse().join(".")} ${f.ts.slice(11, 19)} · akış #${f.id}` : "Etiket yok (elle düzenlendi)"}</div>
+        </div>
+        <span class="badge ${isAtk ? "attack" : "benign"}">${isAtk ? ICON_ALERT + "SALDIRI" : ICON_SHIELD + "NORMAL"}</span>
+      </div>
+      <div class="prob"><b class="num">${pct(ex.attack_probability, 2)}</b><span class="muted">saldırı olasılığı</span></div>
+      <div class="meter" role="img" aria-label="Saldırı olasılığı ${pct(ex.attack_probability, 2)}, eşik ${pct(ex.threshold, 1)}">
+        <div class="fill" style="width:${(ex.attack_probability * 100).toFixed(2)}%;background:${isAtk ? "var(--attack)" : "var(--benign)"}"></div>
+        <div class="thr" style="left:calc(${(ex.threshold * 100).toFixed(2)}% - 1px)"></div>
+      </div>
+      <div class="meter-scale"><span>0</span><span class="thr-label" style="left:${(ex.threshold * 100).toFixed(2)}%">eşik ${fmt(ex.threshold, 3)}</span><span>1</span></div>
+      ${f ? `<div class="verdict ${right ? "ok" : "bad"}">${right ? ICON_OK + "Model doğru karar verdi." : ICON_BAD + (f.is_attack ? "Model bu saldırıyı kaçırdı." : "Yanlış alarm: normal akışı saldırı sandı.")}</div>` : ""}
+      ${f && f.seen_in_train ? '<div class="note">Bu akışın tüm ölçümleri eğitimdeki bir akışla birebir aynı (test akışlarının %26,6\'sında böyle).</div>' : ""}
+      <div class="note muted">Model süresi ${fmt(ex.inference_ms, 1)} ms</div>
+    </div>
+    <div class="card pad">
+      <h3>Kararı en çok etkileyen özellikler</h3>
+      <div class="clegend"><span><i class="sw" style="background:var(--toward-benign)"></i>normale iter</span><span>saldırıya iter<i class="sw" style="background:var(--toward-attack)"></i></span></div>
+      <div class="contrib">${ex.top.map(t => {
+        const wd = (Math.abs(t.contribution) / maxC * 50).toFixed(1), pos = t.contribution > 0;
+        const sql = t.source !== "CICFlowMeter";
+        return `<div class="crow">
+          <div class="name">${esc(t.label)}<span class="tag ${sql ? "sql" : ""}">${sql ? "SQL" : "CIC"}</span><small class="num">değer: ${t.value == null ? "boş" : fmt(t.value, Math.abs(t.value) < 10 && t.value % 1 ? 3 : 0)}</small></div>
+          <div class="dbar" data-tip="${esc(t.feature)} · ${t.source} · katkı ${fmt(t.contribution, 2)} log-odds"><i class="mid"></i><i class="b ${pos ? "pos" : "neg"}" style="width:${wd}%"></i></div>
+          <div class="v num">${pos ? "+" : ""}${fmt(t.contribution, 2)}</div></div>`; }).join("")}
+      </div>
+      <p class="note muted">Değerler log-odds katkısıdır (TreeSHAP); başlangıç değeri ${fmt(ex.base_log_odds, 2)}. SQL = bu projede SQL ile üretilen özellik, CIC = CICFlowMeter ölçümü.</p>
+    </div>
+    <div class="card pad">
+      <h3>Akışın özeti</h3>
+      <div class="facts">
+        <div class="fact"><div>hedef port · protokol</div><b class="num">${fl.dst_port} · ${PROTO[fl.protocol]}</b></div>
+        <div class="fact"><div>süre</div><b class="num">${fmt(fl.flow_duration / 1e6, 3)} s</b></div>
+        <div class="fact"><div>paket (ileri / geri)</div><b class="num">${int(fl.tot_fwd_pkts)} / ${int(fl.tot_bwd_pkts)}</b></div>
+        <div class="fact"><div>bayt (ileri / geri)</div><b class="num">${int(fl.totlen_fwd_pkts)} / ${int(fl.totlen_bwd_pkts)}</b></div>
+        <div class="fact"><div>aynı porta son 60 s</div><b class="num">${int(w.w60_port_n)} akış</b></div>
+        <div class="fact"><div>tüm portlara son 60 s</div><b class="num">${int(w.w60_all_n)} akış</b></div>
+      </div>
+    </div>
+    <div class="card pad">
+      <details class="edit">
+        <summary>İsteği düzenle ve yeniden gönder</summary>
+        <p class="note">Bu, <span class="mono">POST /explain</span> gövdesidir. Bir değeri değiştirip kararın nasıl değiştiğini görün. Geçersiz değerler (negatif sayaç, bilinmeyen alan…) API tarafından reddedilir.</p>
+        <textarea id="bodyEdit" spellcheck="false" aria-label="İstek gövdesi (JSON)">${esc(JSON.stringify(body, null, 2))}</textarea>
+        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn primary" id="sendBtn">Gönder</button>${f ? '<button class="btn" id="resetBtn">Sıfırla</button>' : ""}</div>
+        <div class="err" id="editErr" role="alert"></div>
+      </details>
+    </div>`;
+  wireEditor(f);
+}
+
+function wireEditor(f) {
+  const send = $("#sendBtn"); if (!send) return;
+  send.addEventListener("click", async () => {
+    let body; try { body = JSON.parse($("#bodyEdit").value); } catch (e) { $("#editErr").textContent = "JSON okunamadı: " + e.message; return; }
+    const same = f && JSON.stringify(body) === JSON.stringify({ flow: f.flow, window: f.window });
+    await explainAndRender(same ? f : null, body);
+    const det = $("details.edit"); if (det) det.open = true;
+  });
+  const reset = $("#resetBtn"); if (reset) reset.addEventListener("click", () => select(f.id));
+}
+
+function renderError(f, body, e) {
+  const msg = Array.isArray(e.detail) ? e.detail.map(x => `• ${x.loc.slice(1).join(".")}: ${x.msg}`).join("\n") : (e.detail || e.message);
+  $("#detail").innerHTML = `<div class="card pad"><h2>İstek reddedildi</h2><p class="sub">API girdiyi doğruladı ve kabul etmedi:</p>
+    <div class="err">${esc(msg)}</div>
+    <details class="edit" open><summary>İsteği düzenle ve yeniden gönder</summary>
+    <textarea id="bodyEdit" spellcheck="false" aria-label="İstek gövdesi (JSON)">${esc(JSON.stringify(body, null, 2))}</textarea>
+    <div style="display:flex;gap:8px;margin-top:8px"><button class="btn primary" id="sendBtn">Gönder</button>${f || current ? '<button class="btn" id="resetBtn">Sıfırla</button>' : ""}</div>
+    <div class="err" id="editErr" role="alert"></div></details></div>`;
+  wireEditor(f || flows.find(x => x.id === current));
+}
+
+// ---- sonuçlar ----
+let resultsLoaded = false;
+async function loadResults() {
+  if (resultsLoaded) return; resultsLoaded = true;
+  let r; try { r = await api("/results"); } catch (e) { $("#kpis").innerHTML = '<div class="card pad">Sonuç dosyaları bulunamadı.</div>'; return; }
+  const lgb = (r.methods || []).find(m => m.name === "lightgbm");
+  const lodo = r.lodo || [];
+  const med = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+  $("#kpis").innerHTML = [
+    ["PR-AUC", fmt(lgb?.pr_auc), "kronolojik test, LightGBM", ""],
+    ["Yakalanan saldırı", pct(lgb?.recall), "recall, doğrulamada seçilen eşik", ""],
+    ["Yanlış alarm", fmt(lgb?.fa_per_1000, 2), "1.000 normal akışta", ""],
+    ["Görülmemiş günde yakalanan", lodo.length ? pct(med(lodo.map(x => x.recall))) : "—", `${lodo.length} günün medyanı`, ""],
+  ].map(([l, v, d]) => `<div class="card pad kpi"><div class="l">${l}</div><div class="v num">${v}</div><div class="d">${d}</div></div>`).join("");
+
+  const pair = (rows, fmtRow) => `<div class="legend"><span><i class="sw" style="background:var(--s1)"></i>PR-AUC</span><span><i class="sw" style="background:var(--s2)"></i>Recall</span></div>
+    <div class="hbars">${rows.map(fmtRow).join("")}</div><div class="axis"><span>0</span><span>0,5</span><span>1</span></div>`;
+  const bar = (v, color, tipText) => `<div class="track" data-tip="${esc(tipText)}" style="--f:${Math.min(1, Math.max(0, v || 0))}"><div class="bar" style="width:calc(var(--f) * 100%);background:${color}"></div><span class="val num">${fmt(v)}</span></div>`;
+
+  const methods = (r.methods || []);
+  $("#c-methods").innerHTML = pair(methods, m => `<div class="hrow"><div class="rl">${METHOD_TR[m.name] || m.name}<small>YA/1000: ${fmt(m.fa_per_1000, 2)}</small></div>
+    <div class="pair">${bar(m.pr_auc, "var(--s1)", `${METHOD_TR[m.name]} · PR-AUC ${fmt(m.pr_auc)}`)}${bar(m.recall, "var(--s2)", `${METHOD_TR[m.name]} · recall ${fmt(m.recall)} · precision ${fmt(m.precision)}`)}</div></div>`)
+    + `<div class="callout">Hep "normal" diyen model %85 accuracy alır; bu yüzden accuracy yerine PR-AUC, recall ve yanlış alarm raporlandı.</div>`;
+
+  $("#c-lodo").innerHTML = pair(lodo, x => `<div class="hrow"><div class="rl">${x.day.slice(8, 10)}.${x.day.slice(5, 7)}<small>${esc(x.labels.map(shortName).join(", "))}${x.seen_in_train ? " · tür başka günde var" : ""}</small></div>
+    <div class="pair">${bar(x.pr_auc, "var(--s1)", `${x.day} · PR-AUC ${fmt(x.pr_auc)} · saldırı payı ${pct(x.prevalence)}`)}${bar(x.recall, "var(--s2)", `${x.day} · recall ${fmt(x.recall)} · YA/1000 ${fmt(x.fa_per_1000, 2)}`)}</div></div>`)
+    + `<div class="callout">Ana testte recall 0,94; bir gün hiç görülmediğinde medyan ${fmt(med(lodo.map(x => x.recall)), 2)}. Hulk/SlowHTTPTest eğitimde yokken bile yakalanıyor, web saldırıları ve Infiltration ise görülmüş olsalar da zor.</div>`
+    + tableDetails(["Gün", "Türler", "PR-AUC", "Recall", "Precision", "YA/1000"], lodo.map(x => [x.day, x.labels.map(labelName).join(", "), fmt(x.pr_auc), fmt(x.recall), fmt(x.precision), fmt(x.fa_per_1000, 2)]));
+
+  const pl = (r.per_label || []).slice().sort((a, b) => (a.label === "Benign") - (b.label === "Benign") || b.flag_rate - a.flag_rate);
+  $("#c-labels").innerHTML = `<div class="hbars">${pl.map(x => `<div class="hrow"><div class="rl">${esc(labelName(x.label))}<small class="num">${int(x.n)} test akışı</small></div>
+    <div class="pair"><div class="track" data-tip="${esc(labelName(x.label))} · ${int(x.flagged)}/${int(x.n)} işaretlendi" style="--f:${x.flag_rate}"><div class="bar" style="width:calc(var(--f) * 100%);background:${x.label === "Benign" ? "var(--muted)" : "var(--s1)"}"></div><span class="val num">${pct(x.flag_rate)}</span></div></div></div>`).join("")}</div>
+    <div class="axis"><span>%0</span><span>%50</span><span>%100</span></div>`;
+
+  const ab = r.ablation || [];
+  const AB_TR = n => n.startsWith("all") ? "Tüm özellikler" : n.startsWith("no_shortcut") ? "Port ve TCP penceresi çıkarıldı" : n.startsWith("no_window") ? "SQL pencere özellikleri çıkarıldı" : "Yalnızca CICFlowMeter (SQL yok)";
+  $("#c-ablation").innerHTML = `<table><thead><tr><th>Özellik kümesi</th><th class="n">Özellik</th><th class="n">PR-AUC</th><th class="n">Recall</th><th class="n">YA/1000</th></tr></thead>
+    <tbody>${ab.map(x => `<tr><td>${AB_TR(x.name)}</td><td class="n">${x.n_features}</td><td class="n">${fmt(x.pr_auc)}</td><td class="n">${fmt(x.recall)}</td><td class="n">${fmt(x.fa_per_1000, 2)}</td></tr>`).join("")}</tbody></table>
+    <div class="callout">Farklar 0,97–0,99 aralığında olduğu için çubuk yerine tablo: SQL pencere özellikleri PR-AUC'u 0,973'ten 0,990'a çıkarıyor; port ve TCP penceresini çıkarmak sonucu değiştirmiyor.</div>`;
+}
+function tableDetails(head, rows) {
+  return `<details class="tbl"><summary>Tablo olarak göster</summary><table><thead><tr>${head.map((h, i) => `<th class="${i > 1 ? "n" : ""}">${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td class="${i > 1 ? "n" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></details>`;
+}
+
+const start = tabs.find(t => location.hash === "#" + t.id.slice(4));
+if (start) selectTab(start);
+init();
+</script>
+</body>
+</html>

@@ -75,3 +75,40 @@ def test_invalid_inputs_are_rejected(client, mutate):
 def test_model_card_endpoint(client):
     assert client.get("/model").json()["threshold"] == 0.5
     assert client.get("/health").json() == {"status": "ok"}
+
+
+def test_explain_contributions_add_up_to_model_logit(client):
+    """Açıklama modelin kendisidir: tüm katkılar + başlangıç = olasılığın logit'i."""
+    body = client.post(f"/explain?top={len(CANDIDATE_FEATURES)}", json=valid_request()).json()
+    p = body["attack_probability"]
+    total = body["base_log_odds"] + sum(t["contribution"] for t in body["top"])
+    assert total == pytest.approx(np.log(p / (1 - p)), abs=1e-4)
+    mags = [abs(t["contribution"]) for t in body["top"]]
+    assert mags == sorted(mags, reverse=True)
+    assert body["decision"] == client.post("/predict", json=valid_request()).json()["decision"]
+
+
+def test_demo_flows_are_valid_api_requests(client):
+    flows = client.get("/examples").json()["flows"]
+    assert len(flows) > 20 and {f["is_attack"] for f in flows} == {True, False}
+    for f in flows:
+        r = client.post("/predict", json={"flow": f["flow"], "window": f["window"]})
+        assert r.status_code == 200, (f["id"], r.text)
+
+
+def test_ui_and_results_summary_are_served(client):
+    r = client.get("/")
+    assert r.status_code == 200 and "Ağ Saldırısı Tespiti" in r.text
+    s = client.get("/results").json()
+    assert {m["name"] for m in s["methods"]} >= {"majority", "lightgbm"}
+    assert len(s["lodo"]) == 10
+
+
+def test_committed_model_loads_and_uses_no_forbidden_fields():
+    from ids.columns import FORBIDDEN_FEATURES
+    from ids.config import MODELS_DIR
+    bundle = joblib.load(MODELS_DIR / "ids" / "model.joblib")
+    feats = bundle["card"]["features"]
+    assert set(feats) <= set(CANDIDATE_FEATURES)
+    assert not set(feats) & set(FORBIDDEN_FEATURES)
+    assert bundle["estimator"].n_features_in_ == len(feats)
