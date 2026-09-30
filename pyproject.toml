@@ -1,0 +1,10 @@
+[project]
+name = "sql-saldiri-tespit"
+version = "1.0.0"
+description = "CSE-CIC-IDS2018 üzerinde PostgreSQL + SQL özellik hattı ile ağ saldırısı tespiti"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning:starlette.*", "ignore::DeprecationWarning:fastapi.*"]

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: ids-postgres
+    environment:
+      POSTGRES_USER: ids
+      POSTGRES_PASSWORD: ids
+      POSTGRES_DB: ids
+    ports:
+      - "${IDS_PG_PORT:-5434}:5432"
+    shm_size: 2g
+    # Toplu yükleme odaklı ayarlar: WAL üretimini azaltır (wal_level=minimal),
+    # büyük sıralama/indeks işlemleri için bellek verir.
+    command: >
+      postgres
+      -c shared_buffers=2GB
+      -c work_mem=256MB
+      -c maintenance_work_mem=2GB
+      -c effective_cache_size=8GB
+      -c max_wal_size=8GB
+      -c wal_level=minimal
+      -c max_wal_senders=0
+      -c synchronous_commit=off
+      -c max_parallel_workers_per_gather=4
+      -c max_parallel_maintenance_workers=4
+      -c jit=off
+    volumes:
+      - ids-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ids -d ids"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  ids-pgdata:

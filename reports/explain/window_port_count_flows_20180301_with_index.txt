@@ -1,0 +1,19 @@
+-- window_port_count_flows_20180301_with_index
+-- Pencere özelliği sorgusunun çekirdeği (indeks karşılaştırması için). flows_20180301 = clean bölüm adı
+SELECT sum(n) FROM (
+    SELECT count(*) OVER w AS n
+    FROM clean.flows_20180301 c
+    WINDOW w AS (PARTITION BY c.dst_port ORDER BY c.end_ts RANGE BETWEEN interval '60 seconds' PRECEDING AND CURRENT ROW)
+) s
+
+Aggregate  (cost=19996.19..19996.20 rows=1 width=32) (actual time=233.814..233.815 rows=1 loops=1)
+  Buffers: shared hit=1 read=1268
+  ->  WindowAgg  (cost=0.42..15858.48 rows=331017 width=20) (actual time=0.030..217.557 rows=331017 loops=1)
+        Buffers: shared hit=1 read=1268
+        ->  Index Only Scan using bench_flows_20180301_port_end on flows_20180301 c  (cost=0.42..10065.68 rows=331017 width=12) (actual time=0.023..36.950 rows=331017 loops=1)
+              Heap Fetches: 0
+              Buffers: shared hit=1 read=1268
+Planning:
+  Buffers: shared hit=8 read=1
+Planning Time: 0.162 ms
+Execution Time: 233.836 ms

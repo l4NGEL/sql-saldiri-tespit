@@ -1,0 +1,83 @@
+-- features_build_select_flows_20180221
+SELECT
+        c.flow_id,
+        c.capture_day,
+        CASE WHEN e.episode_no IS NULL THEN floor(extract(epoch FROM c.ts - c.capture_day::timestamp) / 600)::int
+             WHEN c.ts < e.start_ts OR c.ts > e.end_ts THEN -1
+             ELSE 100000 + e.episode_no * 10 + features.episode_part(c.ts, e.start_ts, e.end_ts, e.t60, e.t80) END,
+        CASE WHEN e.episode_no IS NULL THEN features.split_time_block(c.ts, c.capture_day)
+             WHEN c.ts < e.start_ts OR c.ts > e.end_ts THEN 'gap'
+             ELSE (ARRAY['train','gap','val','gap','test'])[features.episode_part(c.ts, e.start_ts, e.end_ts, e.t60, e.t80) + 1] END,
+        features.split_random(c.flow_id),
+        -- satır düzeyi
+        c.flow_duration / 1e6,
+        c.totlen_fwd_pkts / nullif(c.tot_fwd_pkts, 0),
+        c.totlen_bwd_pkts / nullif(c.tot_bwd_pkts, 0),
+        c.totlen_bwd_pkts / (c.totlen_fwd_pkts + 1),
+        c.tot_bwd_pkts / nullif(c.tot_fwd_pkts, 0),
+        c.totlen_fwd_pkts / nullif(c.totlen_fwd_pkts + c.fwd_header_len, 0),
+        ln(1 + c.totlen_fwd_pkts + c.totlen_bwd_pkts),
+        c.flow_iat_std / nullif(c.flow_iat_mean, 0),
+        c.active_mean / (c.idle_mean + 1),
+        (c.tot_bwd_pkts = 0)::int,
+        (c.flow_duration = 0)::int,
+        (c.dst_port < 1024)::int,
+        -- Not: float toplamlarının kayan-pencere ters fonksiyonu yoktur (her satırda yeniden
+        -- toplanır); tamsayıya çevrilen toplamlar ise O(1) güncellenir.
+        -- pencereler: RANGE çerçevesi bitiş zamanına göre; CURRENT ROW eşzamanlı bitenleri de
+        -- kapsar (onlar da o an görülmüştür). Akışın kendi katkısı çıkarılır.
+        count(*) OVER w10p - 1,
+        count(*) OVER w60p - 1,
+        count(*) OVER w60a - 1,
+        (count(*) OVER w60p - 1)::real / nullif(count(*) OVER w60a - 1, 0),
+        (sum(c.tot_fwd_pkts::bigint) OVER w60p - c.tot_fwd_pkts::bigint)::real / nullif(count(*) OVER w60p - 1, 0),
+        (sum(c.flow_duration::bigint) OVER w60p - c.flow_duration::bigint) / 1e6 / nullif(count(*) OVER w60p - 1, 0),
+        (sum((c.tot_bwd_pkts = 0)::int) OVER w60p - (c.tot_bwd_pkts = 0)::int)::real / nullif(count(*) OVER w60p - 1, 0),
+        (sum((c.rst_flag_cnt > 0)::int) OVER w60p - (c.rst_flag_cnt > 0)::int)::real / nullif(count(*) OVER w60p - 1, 0)
+    FROM clean.flows_20180221 c
+    LEFT JOIN features.episodes e
+           ON e.capture_day = c.capture_day
+          AND c.ts BETWEEN e.start_ts - interval '60 seconds' AND e.end_ts + interval '60 seconds'
+    WINDOW
+        w10p AS (PARTITION BY c.dst_port ORDER BY c.end_ts RANGE BETWEEN interval '10 seconds' PRECEDING AND CURRENT ROW),
+        w60p AS (PARTITION BY c.dst_port ORDER BY c.end_ts RANGE BETWEEN interval '60 seconds' PRECEDING AND CURRENT ROW),
+        w60a AS (ORDER BY c.end_ts RANGE BETWEEN interval '60 seconds' PRECEDING AND CURRENT ROW)
+
+WindowAgg  (cost=410737.75..1665969.29 rows=1030991 width=244) (actual time=3984.231..18186.427 rows=1031018 loops=1)
+  Buffers: shared hit=8289 read=43651
+  ->  Sort  (cost=410737.75..413315.23 rows=1030991 width=208) (actual time=3983.136..4098.263 rows=1031018 loops=1)
+        Sort Key: c.end_ts
+        Sort Method: quicksort  Memory: 217880kB
+        Buffers: shared hit=8269 read=43650
+        ->  WindowAgg  (cost=122459.63..307764.43 rows=1030991 width=208) (actual time=425.367..3381.056 rows=1031018 loops=1)
+              Buffers: shared hit=8269 read=43650
+              ->  WindowAgg  (cost=122459.63..263947.31 rows=1030991 width=120) (actual time=425.309..1638.387 rows=1031018 loops=1)
+                    Buffers: shared hit=8269 read=43650
+                    ->  Gather Merge  (cost=122459.63..245904.97 rows=1030991 width=112) (actual time=425.295..777.177 rows=1031018 loops=1)
+                          Workers Planned: 4
+                          Workers Launched: 4
+                          Buffers: shared hit=8269 read=43650
+                          ->  Sort  (cost=121459.57..122103.94 rows=257748 width=112) (actual time=400.528..422.477 rows=206204 loops=5)
+                                Sort Key: c.dst_port, c.end_ts
+                                Sort Method: quicksort  Memory: 40126kB
+                                Buffers: shared hit=8269 read=43650
+                                Worker 0:  Sort Method: quicksort  Memory: 34430kB
+                                Worker 1:  Sort Method: quicksort  Memory: 34821kB
+                                Worker 2:  Sort Method: quicksort  Memory: 31336kB
+                                Worker 3:  Sort Method: quicksort  Memory: 34985kB
+                                ->  Hash Left Join  (cost=26.88..98293.70 rows=257748 width=112) (actual time=0.171..227.251 rows=206204 loops=5)
+                                      Hash Cond: (c.capture_day = e.capture_day)
+                                      Join Filter: ((c.ts >= (e.start_ts - '00:01:00'::interval)) AND (c.ts <= (e.end_ts + '00:01:00'::interval)))
+                                      Rows Removed by Join Filter: 206306
+                                      Buffers: shared hit=8098 read=43649
+                                      ->  Parallel Seq Scan on flows_20180221 c  (cost=0.00..54127.48 rows=257748 width=76) (actual time=0.018..61.674 rows=206204 loops=5)
+                                            Buffers: shared hit=7902 read=43648
+                                      ->  Hash  (cost=17.50..17.50 rows=750 width=40) (actual time=0.065..0.066 rows=26 loops=5)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                                            Buffers: shared hit=4 read=1
+                                            ->  Seq Scan on episodes e  (cost=0.00..17.50 rows=750 width=40) (actual time=0.053..0.056 rows=26 loops=5)
+                                                  Buffers: shared hit=4 read=1
+Planning:
+  Buffers: shared hit=126 read=15
+Planning Time: 0.864 ms
+Execution Time: 18304.190 ms

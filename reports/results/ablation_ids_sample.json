@@ -1,0 +1,5192 @@
+{
+  "experiment": "ablation",
+  "database": "ids_sample",
+  "created_at": "2026-09-29T11:00:29.868990+00:00",
+  "params": {
+    "train_cap": 300000,
+    "benign_train_keep_pct": null
+  },
+  "results": {
+    "all_features": {
+      "n_features": 90,
+      "excluded": [],
+      "train_rows": 20801,
+      "train_s": 3.2546387999900617,
+      "best_iteration": 125,
+      "val": {
+        "rows": 6931,
+        "attack_rows": 1368,
+        "pr_auc": 0.9335510532729646,
+        "roc_auc": 0.9657721810668441,
+        "prevalence": 0.19737411628913576,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8780498681295393,
+            "tp": 1128,
+            "fp": 0,
+            "fn": 240,
+            "tn": 5563,
+            "precision": 1.0,
+            "recall": 0.8245614035087719,
+            "f1": 0.9038461538461539,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9653729620545376,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 112,
+                "flag_rate": 0.9911504424778761
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 104,
+                "flag_rate": 0.9541284403669725
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 36,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.8499457176637439,
+            "tp": 1128,
+            "fp": 0,
+            "fn": 240,
+            "tn": 5563,
+            "precision": 1.0,
+            "recall": 0.8245614035087719,
+            "f1": 0.9038461538461539,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9653729620545376,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 112,
+                "flag_rate": 0.9911504424778761
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 104,
+                "flag_rate": 0.9541284403669725
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 36,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.841821015017552,
+            "tp": 1128,
+            "fp": 5,
+            "fn": 240,
+            "tn": 5558,
+            "precision": 0.9955869373345102,
+            "recall": 0.8245614035087719,
+            "f1": 0.9020391843262696,
+            "fa_per_1000_benign": 0.8987956138774043,
+            "accuracy": 0.9646515654306738,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 5,
+                "flag_rate": 0.0008987956138774043
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 112,
+                "flag_rate": 0.9911504424778761
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 104,
+                "flag_rate": 0.9541284403669725
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 36,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5954886136920902,
+            "tp": 1149,
+            "fp": 55,
+            "fn": 219,
+            "tn": 5508,
+            "precision": 0.9543189368770764,
+            "recall": 0.8399122807017544,
+            "f1": 0.8934681181959564,
+            "fa_per_1000_benign": 9.886751752651447,
+            "accuracy": 0.9604674650122638,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 55,
+                "flag_rate": 0.009886751752651447
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 113,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 108,
+                "flag_rate": 0.9908256880733946
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 12,
+                "flag_rate": 0.05217391304347826
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test": {
+        "rows": 7246,
+        "attack_rows": 1391,
+        "pr_auc": 0.9558834718627481,
+        "roc_auc": 0.9803127461459265,
+        "prevalence": 0.19196798233508142,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8780498681295393,
+            "tp": 1161,
+            "fp": 0,
+            "fn": 230,
+            "tn": 5855,
+            "precision": 1.0,
+            "recall": 0.8346513299784328,
+            "f1": 0.9098746081504703,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9682583494341706,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 103,
+                "flag_rate": 0.9035087719298246
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 105,
+                "flag_rate": 0.9459459459459459
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 3,
+                "flag_rate": 0.01485148514851485
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 9,
+                "flag_rate": 0.6923076923076923
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.8499457176637439,
+            "tp": 1166,
+            "fp": 1,
+            "fn": 225,
+            "tn": 5854,
+            "precision": 0.9991431019708654,
+            "recall": 0.8382458662832495,
+            "f1": 0.91164972634871,
+            "fa_per_1000_benign": 0.1707941929974381,
+            "accuracy": 0.9688103781396633,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 1,
+                "flag_rate": 0.0001707941929974381
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 104,
+                "flag_rate": 0.9122807017543859
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 106,
+                "flag_rate": 0.954954954954955
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 5,
+                "flag_rate": 0.024752475247524754
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 10,
+                "flag_rate": 0.7692307692307693
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.841821015017552,
+            "tp": 1169,
+            "fp": 3,
+            "fn": 222,
+            "tn": 5852,
+            "precision": 0.9974402730375427,
+            "recall": 0.8404025880661394,
+            "f1": 0.9122122512680453,
+            "fa_per_1000_benign": 0.5123825789923142,
+            "accuracy": 0.9689483853160364,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 3,
+                "flag_rate": 0.0005123825789923143
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 104,
+                "flag_rate": 0.9122807017543859
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 106,
+                "flag_rate": 0.954954954954955
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 8,
+                "flag_rate": 0.039603960396039604
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 10,
+                "flag_rate": 0.7692307692307693
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5954886136920902,
+            "tp": 1213,
+            "fp": 86,
+            "fn": 178,
+            "tn": 5769,
+            "precision": 0.9337952270977675,
+            "recall": 0.8720345075485263,
+            "f1": 0.9018587360594796,
+            "fa_per_1000_benign": 14.688300597779676,
+            "accuracy": 0.9635661054374828,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 86,
+                "flag_rate": 0.014688300597779676
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 39,
+                "flag_rate": 0.9512195121951219
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 104,
+                "flag_rate": 0.9904761904761905
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 38,
+                "flag_rate": 0.18811881188118812
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 12,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test_unseen_feature_vectors": {
+        "rows": 6823,
+        "attack_rows": 1060,
+        "pr_auc": 0.933537279072561,
+        "roc_auc": 0.9744634771591054,
+        "prevalence": 0.15535688113732962,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8780498681295393,
+            "tp": 832,
+            "fp": 0,
+            "fn": 228,
+            "tn": 5763,
+            "precision": 1.0,
+            "recall": 0.7849056603773585,
+            "f1": 0.8794926004228331,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9665836142459329,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 76,
+                "flag_rate": 0.8735632183908046
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 86,
+                "flag_rate": 0.9347826086956522
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 3,
+                "flag_rate": 0.014925373134328358
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 9,
+                "flag_rate": 0.75
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.8499457176637439,
+            "tp": 837,
+            "fp": 1,
+            "fn": 223,
+            "tn": 5762,
+            "precision": 0.9988066825775657,
+            "recall": 0.789622641509434,
+            "f1": 0.8819810326659641,
+            "fa_per_1000_benign": 0.17352073572791948,
+            "accuracy": 0.9671698666275832,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 1,
+                "flag_rate": 0.00017352073572791948
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 77,
+                "flag_rate": 0.8850574712643678
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 87,
+                "flag_rate": 0.9456521739130435
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 5,
+                "flag_rate": 0.024875621890547265
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 10,
+                "flag_rate": 0.8333333333333334
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.841821015017552,
+            "tp": 840,
+            "fp": 3,
+            "fn": 220,
+            "tn": 5760,
+            "precision": 0.99644128113879,
+            "recall": 0.7924528301886793,
+            "f1": 0.882816605359958,
+            "fa_per_1000_benign": 0.5205622071837585,
+            "accuracy": 0.9673164297229957,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 3,
+                "flag_rate": 0.0005205622071837585
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 77,
+                "flag_rate": 0.8850574712643678
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 87,
+                "flag_rate": 0.9456521739130435
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 8,
+                "flag_rate": 0.03980099502487562
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 10,
+                "flag_rate": 0.8333333333333334
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5954886136920902,
+            "tp": 882,
+            "fp": 80,
+            "fn": 178,
+            "tn": 5683,
+            "precision": 0.9168399168399168,
+            "recall": 0.8320754716981132,
+            "f1": 0.8724035608308607,
+            "fa_per_1000_benign": 13.881658858233559,
+            "accuracy": 0.9621867213835557,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 80,
+                "flag_rate": 0.013881658858233559
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 90,
+                "flag_rate": 0.9782608695652174
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 39,
+                "flag_rate": 0.9512195121951219
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 103,
+                "flag_rate": 0.9903846153846154
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 37,
+                "flag_rate": 0.18407960199004975
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 11,
+                "flag_rate": 0.9166666666666666
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "no_shortcut_risk (dst_port, init_win)": {
+      "n_features": 87,
+      "excluded": [
+        "dst_port",
+        "init_fwd_win_byts",
+        "init_bwd_win_byts"
+      ],
+      "train_rows": 20801,
+      "train_s": 3.3042180000047665,
+      "best_iteration": 130,
+      "val": {
+        "rows": 6931,
+        "attack_rows": 1368,
+        "pr_auc": 0.927600482219575,
+        "roc_auc": 0.9625698274838033,
+        "prevalence": 0.19737411628913576,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8401843656322404,
+            "tp": 1105,
+            "fp": 9,
+            "fn": 263,
+            "tn": 5554,
+            "precision": 0.9919210053859964,
+            "recall": 0.8077485380116959,
+            "f1": 0.8904109589041095,
+            "fa_per_1000_benign": 1.6178321049793276,
+            "accuracy": 0.9607560236618092,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 9,
+                "flag_rate": 0.0016178321049793278
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 111,
+                "flag_rate": 0.9823008849557522
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 89,
+                "flag_rate": 0.8165137614678899
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 32,
+                "flag_rate": 0.8205128205128205
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9661137711986095,
+            "tp": 1044,
+            "fp": 0,
+            "fn": 324,
+            "tn": 5563,
+            "precision": 1.0,
+            "recall": 0.7631578947368421,
+            "f1": 0.8656716417910448,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9532534987736258,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 97,
+                "flag_rate": 0.8584070796460177
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 70,
+                "flag_rate": 0.6422018348623854
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 24,
+                "flag_rate": 0.6153846153846154
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 103,
+                "flag_rate": 0.9279279279279279
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 104,
+                "flag_rate": 0.9811320754716981
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 1,
+                "flag_rate": 0.07692307692307693
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 112,
+                "flag_rate": 0.9824561403508771
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.8694179028389379,
+            "tp": 1098,
+            "fp": 5,
+            "fn": 270,
+            "tn": 5558,
+            "precision": 0.9954669084315503,
+            "recall": 0.8026315789473685,
+            "f1": 0.8887090246863618,
+            "fa_per_1000_benign": 0.8987956138774043,
+            "accuracy": 0.960323185687491,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 5,
+                "flag_rate": 0.0008987956138774043
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 111,
+                "flag_rate": 0.9823008849557522
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 84,
+                "flag_rate": 0.7706422018348624
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 32,
+                "flag_rate": 0.8205128205128205
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 9,
+                "flag_rate": 0.6923076923076923
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.6481941148578708,
+            "tp": 1134,
+            "fp": 55,
+            "fn": 234,
+            "tn": 5508,
+            "precision": 0.9537426408746846,
+            "recall": 0.8289473684210527,
+            "f1": 0.8869769260852562,
+            "fa_per_1000_benign": 9.886751752651447,
+            "accuracy": 0.9583032751406724,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 55,
+                "flag_rate": 0.009886751752651447
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 111,
+                "flag_rate": 0.9823008849557522
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 99,
+                "flag_rate": 0.908256880733945
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 36,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 11,
+                "flag_rate": 0.04782608695652174
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test": {
+        "rows": 7246,
+        "attack_rows": 1391,
+        "pr_auc": 0.9500901689770683,
+        "roc_auc": 0.9768452925080777,
+        "prevalence": 0.19196798233508142,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8401843656322404,
+            "tp": 1161,
+            "fp": 10,
+            "fn": 230,
+            "tn": 5845,
+            "precision": 0.9914602903501281,
+            "recall": 0.8346513299784328,
+            "f1": 0.9063231850117096,
+            "fa_per_1000_benign": 1.7079419299743808,
+            "accuracy": 0.9668782776704389,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 10,
+                "flag_rate": 0.0017079419299743809
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 105,
+                "flag_rate": 0.9210526315789473
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 95,
+                "flag_rate": 0.8558558558558559
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 33,
+                "flag_rate": 0.8048780487804879
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 102,
+                "flag_rate": 0.9714285714285714
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 12,
+                "flag_rate": 0.0594059405940594
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 9,
+                "flag_rate": 0.6923076923076923
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9661137711986095,
+            "tp": 1088,
+            "fp": 0,
+            "fn": 303,
+            "tn": 5855,
+            "precision": 1.0,
+            "recall": 0.7821710999281093,
+            "f1": 0.8777732956837434,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9581838255589291,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 82,
+                "flag_rate": 0.7192982456140351
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 79,
+                "flag_rate": 0.7117117117117117
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 20,
+                "flag_rate": 0.4878048780487805
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 4,
+                "flag_rate": 0.3076923076923077
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.8694179028389379,
+            "tp": 1143,
+            "fp": 6,
+            "fn": 248,
+            "tn": 5849,
+            "precision": 0.9947780678851175,
+            "recall": 0.8217109992810927,
+            "f1": 0.8999999999999999,
+            "fa_per_1000_benign": 1.0247651579846284,
+            "accuracy": 0.9649461772012145,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 6,
+                "flag_rate": 0.0010247651579846286
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 105,
+                "flag_rate": 0.9210526315789473
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 94,
+                "flag_rate": 0.8468468468468469
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 32,
+                "flag_rate": 0.7804878048780488
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 110,
+                "flag_rate": 0.990990990990991
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 8,
+                "flag_rate": 0.6153846153846154
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.6481941148578708,
+            "tp": 1200,
+            "fp": 70,
+            "fn": 191,
+            "tn": 5785,
+            "precision": 0.9448818897637795,
+            "recall": 0.8626887131560029,
+            "f1": 0.9019165727170237,
+            "fa_per_1000_benign": 11.955593509820666,
+            "accuracy": 0.9639801269666023,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 70,
+                "flag_rate": 0.011955593509820665
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 106,
+                "flag_rate": 0.954954954954955
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 104,
+                "flag_rate": 0.9904761904761905
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 32,
+                "flag_rate": 0.15841584158415842
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test_unseen_feature_vectors": {
+        "rows": 6823,
+        "attack_rows": 1060,
+        "pr_auc": 0.9259701438402317,
+        "roc_auc": 0.9702023153559303,
+        "prevalence": 0.15535688113732962,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8401843656322404,
+            "tp": 835,
+            "fp": 10,
+            "fn": 225,
+            "tn": 5753,
+            "precision": 0.9881656804733728,
+            "recall": 0.7877358490566038,
+            "f1": 0.8766404199475066,
+            "fa_per_1000_benign": 1.7352073572791948,
+            "accuracy": 0.9655576725780448,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 10,
+                "flag_rate": 0.0017352073572791948
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 78,
+                "flag_rate": 0.896551724137931
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 79,
+                "flag_rate": 0.8586956521739131
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 33,
+                "flag_rate": 0.8048780487804879
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 101,
+                "flag_rate": 0.9711538461538461
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 12,
+                "flag_rate": 0.05970149253731343
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 9,
+                "flag_rate": 0.75
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9661137711986095,
+            "tp": 781,
+            "fp": 0,
+            "fn": 279,
+            "tn": 5763,
+            "precision": 1.0,
+            "recall": 0.7367924528301887,
+            "f1": 0.848451928299837,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9591088963798915,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 66,
+                "flag_rate": 0.7586206896551724
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 71,
+                "flag_rate": 0.7717391304347826
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 20,
+                "flag_rate": 0.4878048780487805
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 4,
+                "flag_rate": 0.3333333333333333
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.8694179028389379,
+            "tp": 817,
+            "fp": 6,
+            "fn": 243,
+            "tn": 5757,
+            "precision": 0.9927095990279465,
+            "recall": 0.7707547169811321,
+            "f1": 0.8677642060541689,
+            "fa_per_1000_benign": 1.041124414367517,
+            "accuracy": 0.9635057892422688,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 6,
+                "flag_rate": 0.001041124414367517
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 78,
+                "flag_rate": 0.896551724137931
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 78,
+                "flag_rate": 0.8478260869565217
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 32,
+                "flag_rate": 0.7804878048780488
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 110,
+                "flag_rate": 0.990990990990991
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 8,
+                "flag_rate": 0.6666666666666666
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.6481941148578708,
+            "tp": 871,
+            "fp": 66,
+            "fn": 189,
+            "tn": 5697,
+            "precision": 0.9295624332977588,
+            "recall": 0.8216981132075472,
+            "f1": 0.872308462694041,
+            "fa_per_1000_benign": 11.452368558042686,
+            "accuracy": 0.9626264106697934,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 66,
+                "flag_rate": 0.011452368558042686
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 87,
+                "flag_rate": 0.9456521739130435
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 36,
+                "flag_rate": 0.8780487804878049
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 103,
+                "flag_rate": 0.9903846153846154
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 32,
+                "flag_rate": 0.15920398009950248
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 11,
+                "flag_rate": 0.9166666666666666
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "no_window_features": {
+      "n_features": 82,
+      "excluded": [
+        "w10_port_n",
+        "w60_port_n",
+        "w60_all_n",
+        "w60_port_share",
+        "w60_port_mean_fwd_pkts",
+        "w60_port_mean_duration_s",
+        "w60_port_noresp_share",
+        "w60_port_rst_share"
+      ],
+      "train_rows": 20801,
+      "train_s": 3.0546256999950856,
+      "best_iteration": 115,
+      "val": {
+        "rows": 6931,
+        "attack_rows": 1368,
+        "pr_auc": 0.932566830344443,
+        "roc_auc": 0.9652510372942361,
+        "prevalence": 0.19737411628913576,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8733713434289248,
+            "tp": 1132,
+            "fp": 9,
+            "fn": 236,
+            "tn": 5554,
+            "precision": 0.9921121822962313,
+            "recall": 0.827485380116959,
+            "f1": 0.9023515344758868,
+            "fa_per_1000_benign": 1.6178321049793276,
+            "accuracy": 0.9646515654306738,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 9,
+                "flag_rate": 0.0016178321049793278
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 112,
+                "flag_rate": 0.9911504424778761
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 106,
+                "flag_rate": 0.9724770642201835
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 2,
+                "flag_rate": 0.008695652173913044
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9915389418270676,
+            "tp": 931,
+            "fp": 0,
+            "fn": 437,
+            "tn": 5563,
+            "precision": 1.0,
+            "recall": 0.6805555555555556,
+            "f1": 0.8099173553719008,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9369499350743038,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 107,
+                "flag_rate": 0.9469026548672567
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 49,
+                "flag_rate": 0.44954128440366975
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 20,
+                "flag_rate": 0.5128205128205128
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 7,
+                "flag_rate": 0.07692307692307693
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 99,
+                "flag_rate": 0.8918918918918919
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 67,
+                "flag_rate": 0.9852941176470589
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 80,
+                "flag_rate": 0.898876404494382
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 100,
+                "flag_rate": 0.9803921568627451
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 113,
+                "flag_rate": 0.9912280701754386
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9334032701848278,
+            "tp": 1117,
+            "fp": 5,
+            "fn": 251,
+            "tn": 5558,
+            "precision": 0.9955436720142602,
+            "recall": 0.8165204678362573,
+            "f1": 0.8971887550200803,
+            "fa_per_1000_benign": 0.8987956138774043,
+            "accuracy": 0.9630644928581734,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 5,
+                "flag_rate": 0.0008987956138774043
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 108,
+                "flag_rate": 0.9557522123893806
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 100,
+                "flag_rate": 0.9174311926605505
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 108,
+                "flag_rate": 0.972972972972973
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 8,
+                "flag_rate": 0.6153846153846154
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5204495016382088,
+            "tp": 1153,
+            "fp": 54,
+            "fn": 215,
+            "tn": 5509,
+            "precision": 0.9552609776304888,
+            "recall": 0.8428362573099415,
+            "f1": 0.8955339805825242,
+            "fa_per_1000_benign": 9.706992629875966,
+            "accuracy": 0.9611888616361275,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 54,
+                "flag_rate": 0.009706992629875967
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 113,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 108,
+                "flag_rate": 0.9908256880733946
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 16,
+                "flag_rate": 0.06956521739130435
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test": {
+        "rows": 7246,
+        "attack_rows": 1391,
+        "pr_auc": 0.9501933554863286,
+        "roc_auc": 0.9755567847716902,
+        "prevalence": 0.19196798233508142,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8733713434289248,
+            "tp": 1170,
+            "fp": 5,
+            "fn": 221,
+            "tn": 5850,
+            "precision": 0.9957446808510638,
+            "recall": 0.8411214953271028,
+            "f1": 0.911925175370226,
+            "fa_per_1000_benign": 0.8539709649871904,
+            "accuracy": 0.9688103781396633,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 5,
+                "flag_rate": 0.0008539709649871904
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 106,
+                "flag_rate": 0.954954954954955
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 1,
+                "flag_rate": 0.0049504950495049506
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9915389418270676,
+            "tp": 929,
+            "fp": 1,
+            "fn": 462,
+            "tn": 5854,
+            "precision": 0.9989247311827957,
+            "recall": 0.6678648454349388,
+            "f1": 0.8005170185264971,
+            "fa_per_1000_benign": 0.1707941929974381,
+            "accuracy": 0.9361026773392216,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 1,
+                "flag_rate": 0.0001707941929974381
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 95,
+                "flag_rate": 0.8333333333333334
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 50,
+                "flag_rate": 0.45045045045045046
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 19,
+                "flag_rate": 0.4634146341463415
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 5,
+                "flag_rate": 0.05102040816326531
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 103,
+                "flag_rate": 0.9279279279279279
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 85,
+                "flag_rate": 0.9770114942528736
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 81,
+                "flag_rate": 0.8350515463917526
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 77,
+                "flag_rate": 0.7333333333333333
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 1,
+                "flag_rate": 0.0049504950495049506
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 2,
+                "flag_rate": 0.15384615384615385
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 111,
+                "flag_rate": 0.9910714285714286
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9334032701848278,
+            "tp": 1155,
+            "fp": 3,
+            "fn": 236,
+            "tn": 5852,
+            "precision": 0.9974093264248705,
+            "recall": 0.8303378864126527,
+            "f1": 0.9062377402903099,
+            "fa_per_1000_benign": 0.5123825789923142,
+            "accuracy": 0.967016284846812,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 3,
+                "flag_rate": 0.0005123825789923143
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 98,
+                "flag_rate": 0.8596491228070176
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 102,
+                "flag_rate": 0.918918918918919
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 39,
+                "flag_rate": 0.9512195121951219
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 1,
+                "flag_rate": 0.0049504950495049506
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 12,
+                "flag_rate": 0.9230769230769231
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5204495016382088,
+            "tp": 1219,
+            "fp": 74,
+            "fn": 172,
+            "tn": 5781,
+            "precision": 0.94276875483372,
+            "recall": 0.8763479511143063,
+            "f1": 0.9083457526080477,
+            "fa_per_1000_benign": 12.638770281810418,
+            "accuracy": 0.9660502346121999,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 74,
+                "flag_rate": 0.01263877028181042
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 104,
+                "flag_rate": 0.9904761904761905
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 41,
+                "flag_rate": 0.20297029702970298
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test_unseen_feature_vectors": {
+        "rows": 6823,
+        "attack_rows": 1060,
+        "pr_auc": 0.9254115639778501,
+        "roc_auc": 0.9680372349307063,
+        "prevalence": 0.15535688113732962,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.8733713434289248,
+            "tp": 840,
+            "fp": 5,
+            "fn": 220,
+            "tn": 5758,
+            "precision": 0.9940828402366864,
+            "recall": 0.7924528301886793,
+            "f1": 0.8818897637795275,
+            "fa_per_1000_benign": 0.8676036786395974,
+            "accuracy": 0.9670233035321706,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 5,
+                "flag_rate": 0.0008676036786395974
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 87,
+                "flag_rate": 0.9456521739130435
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 1,
+                "flag_rate": 0.004975124378109453
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 12,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.9915389418270676,
+            "tp": 610,
+            "fp": 1,
+            "fn": 450,
+            "tn": 5762,
+            "precision": 0.9983633387888707,
+            "recall": 0.5754716981132075,
+            "f1": 0.730101735487732,
+            "fa_per_1000_benign": 0.17352073572791948,
+            "accuracy": 0.9339000439689287,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 1,
+                "flag_rate": 0.00017352073572791948
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 69,
+                "flag_rate": 0.7931034482758621
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 40,
+                "flag_rate": 0.43478260869565216
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 19,
+                "flag_rate": 0.4634146341463415
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 5,
+                "flag_rate": 0.05102040816326531
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 103,
+                "flag_rate": 0.9279279279279279
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 85,
+                "flag_rate": 0.9770114942528736
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 79,
+                "flag_rate": 0.8315789473684211
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 76,
+                "flag_rate": 0.7307692307692307
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 1,
+                "flag_rate": 0.004975124378109453
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 1,
+                "flag_rate": 0.08333333333333333
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9334032701848278,
+            "tp": 826,
+            "fp": 3,
+            "fn": 234,
+            "tn": 5760,
+            "precision": 0.9963811821471653,
+            "recall": 0.779245283018868,
+            "f1": 0.8745367919534146,
+            "fa_per_1000_benign": 0.5205622071837585,
+            "accuracy": 0.9652645463872197,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 3,
+                "flag_rate": 0.0005205622071837585
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 72,
+                "flag_rate": 0.8275862068965517
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 83,
+                "flag_rate": 0.9021739130434783
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 39,
+                "flag_rate": 0.9512195121951219
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 1,
+                "flag_rate": 0.004975124378109453
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 11,
+                "flag_rate": 0.9166666666666666
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5204495016382088,
+            "tp": 889,
+            "fp": 71,
+            "fn": 171,
+            "tn": 5692,
+            "precision": 0.9260416666666667,
+            "recall": 0.8386792452830188,
+            "f1": 0.8801980198019802,
+            "fa_per_1000_benign": 12.319972236682284,
+            "accuracy": 0.9645317309101569,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 71,
+                "flag_rate": 0.012319972236682283
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 90,
+                "flag_rate": 0.9782608695652174
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 103,
+                "flag_rate": 0.9903846153846154
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 41,
+                "flag_rate": 0.20398009950248755
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 12,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "cicflowmeter_only (SQL özellikleri yok)": {
+      "n_features": 70,
+      "excluded": [
+        "w10_port_n",
+        "w60_port_n",
+        "w60_all_n",
+        "w60_port_share",
+        "w60_port_mean_fwd_pkts",
+        "w60_port_mean_duration_s",
+        "w60_port_noresp_share",
+        "w60_port_rst_share",
+        "duration_s",
+        "fwd_bytes_per_pkt",
+        "bwd_bytes_per_pkt",
+        "bwd_fwd_byte_ratio",
+        "bwd_fwd_pkt_ratio",
+        "fwd_payload_share",
+        "log_total_bytes",
+        "flow_iat_cv",
+        "active_idle_ratio",
+        "no_response",
+        "zero_duration",
+        "well_known_port"
+      ],
+      "train_rows": 20801,
+      "train_s": 2.908799500000896,
+      "best_iteration": 135,
+      "val": {
+        "rows": 6931,
+        "attack_rows": 1368,
+        "pr_auc": 0.9326396409014366,
+        "roc_auc": 0.9651422357199246,
+        "prevalence": 0.19737411628913576,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.860564467858733,
+            "tp": 1131,
+            "fp": 11,
+            "fn": 237,
+            "tn": 5552,
+            "precision": 0.9903677758318739,
+            "recall": 0.8267543859649122,
+            "f1": 0.901195219123506,
+            "fa_per_1000_benign": 1.9773503505302894,
+            "accuracy": 0.9642187274563555,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 11,
+                "flag_rate": 0.0019773503505302894
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 112,
+                "flag_rate": 0.9911504424778761
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 106,
+                "flag_rate": 0.9724770642201835
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 11,
+                "flag_rate": 0.8461538461538461
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.991361345919435,
+            "tp": 975,
+            "fp": 0,
+            "fn": 393,
+            "tn": 5563,
+            "precision": 1.0,
+            "recall": 0.7127192982456141,
+            "f1": 0.8322663252240717,
+            "fa_per_1000_benign": 0.0,
+            "accuracy": 0.9432982253643053,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 107,
+                "flag_rate": 0.9469026548672567
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 47,
+                "flag_rate": 0.43119266055045874
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 27,
+                "flag_rate": 0.6923076923076923
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 33,
+                "flag_rate": 0.3626373626373626
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 103,
+                "flag_rate": 0.9279279279279279
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 67,
+                "flag_rate": 0.9852941176470589
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 87,
+                "flag_rate": 0.9775280898876404
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 101,
+                "flag_rate": 0.9901960784313726
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9021402517353667,
+            "tp": 1124,
+            "fp": 5,
+            "fn": 244,
+            "tn": 5558,
+            "precision": 0.995571302037201,
+            "recall": 0.8216374269005848,
+            "f1": 0.9002803364036844,
+            "fa_per_1000_benign": 0.8987956138774043,
+            "accuracy": 0.9640744481315827,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 5,
+                "flag_rate": 0.0008987956138774043
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 111,
+                "flag_rate": 0.9823008849557522
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 102,
+                "flag_rate": 0.9357798165137615
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 108,
+                "flag_rate": 0.972972972972973
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 1,
+                "flag_rate": 0.004347826086956522
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 10,
+                "flag_rate": 0.7692307692307693
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5382424492727409,
+            "tp": 1153,
+            "fp": 55,
+            "fn": 215,
+            "tn": 5508,
+            "precision": 0.9544701986754967,
+            "recall": 0.8428362573099415,
+            "f1": 0.8951863354037267,
+            "fa_per_1000_benign": 9.886751752651447,
+            "accuracy": 0.9610445823113548,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5563,
+                "flagged": 55,
+                "flag_rate": 0.009886751752651447
+              },
+              {
+                "label": "Bot",
+                "n": 113,
+                "flagged": 113,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 109,
+                "flagged": 108,
+                "flag_rate": 0.9908256880733946
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 39,
+                "flagged": 39,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 91,
+                "flagged": 91,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 93,
+                "flagged": 93,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 68,
+                "flagged": 68,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 89,
+                "flagged": 89,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 90,
+                "flagged": 90,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 102,
+                "flagged": 102,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 106,
+                "flagged": 106,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 230,
+                "flagged": 16,
+                "flag_rate": 0.06956521739130435
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 114,
+                "flagged": 114,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test": {
+        "rows": 7246,
+        "attack_rows": 1391,
+        "pr_auc": 0.9504207270872327,
+        "roc_auc": 0.9756147393792349,
+        "prevalence": 0.19196798233508142,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.860564467858733,
+            "tp": 1175,
+            "fp": 9,
+            "fn": 216,
+            "tn": 5846,
+            "precision": 0.9923986486486487,
+            "recall": 0.8447160316319194,
+            "f1": 0.912621359223301,
+            "fa_per_1000_benign": 1.5371477369769428,
+            "accuracy": 0.9689483853160364,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 9,
+                "flag_rate": 0.0015371477369769428
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 106,
+                "flag_rate": 0.954954954954955
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 110,
+                "flag_rate": 0.990990990990991
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 5,
+                "flag_rate": 0.024752475247524754
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.991361345919435,
+            "tp": 977,
+            "fp": 1,
+            "fn": 414,
+            "tn": 5854,
+            "precision": 0.9989775051124744,
+            "recall": 0.702372393961179,
+            "f1": 0.8248205994090333,
+            "fa_per_1000_benign": 0.1707941929974381,
+            "accuracy": 0.9427270218051339,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 1,
+                "flag_rate": 0.0001707941929974381
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 95,
+                "flag_rate": 0.8333333333333334
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 56,
+                "flag_rate": 0.5045045045045045
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 24,
+                "flag_rate": 0.5853658536585366
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 22,
+                "flag_rate": 0.22448979591836735
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 104,
+                "flag_rate": 0.9369369369369369
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 85,
+                "flag_rate": 0.9770114942528736
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 92,
+                "flag_rate": 0.9484536082474226
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 86,
+                "flag_rate": 0.819047619047619
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 2,
+                "flag_rate": 0.15384615384615385
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 111,
+                "flag_rate": 0.9910714285714286
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9021402517353667,
+            "tp": 1164,
+            "fp": 5,
+            "fn": 227,
+            "tn": 5850,
+            "precision": 0.9957228400342173,
+            "recall": 0.8368080517613228,
+            "f1": 0.9093749999999999,
+            "fa_per_1000_benign": 0.8539709649871904,
+            "accuracy": 0.9679823350814243,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 5,
+                "flag_rate": 0.0008539709649871904
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 105,
+                "flag_rate": 0.9210526315789473
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 101,
+                "flag_rate": 0.9099099099099099
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 100,
+                "flag_rate": 0.9523809523809523
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 1,
+                "flag_rate": 0.0049504950495049506
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5382424492727409,
+            "tp": 1214,
+            "fp": 80,
+            "fn": 177,
+            "tn": 5775,
+            "precision": 0.9381761978361669,
+            "recall": 0.8727534148094895,
+            "f1": 0.9042830540037244,
+            "fa_per_1000_benign": 13.663535439795046,
+            "accuracy": 0.9645321556720949,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5855,
+                "flagged": 80,
+                "flag_rate": 0.013663535439795047
+              },
+              {
+                "label": "Bot",
+                "n": 114,
+                "flagged": 106,
+                "flag_rate": 0.9298245614035088
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 111,
+                "flagged": 107,
+                "flag_rate": 0.963963963963964
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 97,
+                "flagged": 97,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 108,
+                "flagged": 108,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 105,
+                "flagged": 104,
+                "flag_rate": 0.9904761904761905
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 110,
+                "flagged": 110,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 202,
+                "flagged": 38,
+                "flag_rate": 0.18811881188118812
+              },
+              {
+                "label": "SQL Injection",
+                "n": 13,
+                "flagged": 13,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 112,
+                "flagged": 112,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "test_unseen_feature_vectors": {
+        "rows": 6823,
+        "attack_rows": 1060,
+        "pr_auc": 0.9257619454872821,
+        "roc_auc": 0.96811433706894,
+        "prevalence": 0.15535688113732962,
+        "operating_points": {
+          "best_f1_val": {
+            "threshold": 0.860564467858733,
+            "tp": 845,
+            "fp": 9,
+            "fn": 215,
+            "tn": 5754,
+            "precision": 0.9894613583138173,
+            "recall": 0.7971698113207547,
+            "f1": 0.8829676071055381,
+            "fa_per_1000_benign": 1.5616866215512755,
+            "accuracy": 0.9671698666275832,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 9,
+                "flag_rate": 0.0015616866215512754
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 87,
+                "flag_rate": 0.9456521739130435
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 110,
+                "flag_rate": 0.990990990990991
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 5,
+                "flag_rate": 0.024875621890547265
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 12,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=0.1/1000_val": {
+            "threshold": 0.991361345919435,
+            "tp": 659,
+            "fp": 1,
+            "fn": 401,
+            "tn": 5762,
+            "precision": 0.9984848484848485,
+            "recall": 0.6216981132075472,
+            "f1": 0.7662790697674419,
+            "fa_per_1000_benign": 0.17352073572791948,
+            "accuracy": 0.9410816356441448,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 1,
+                "flag_rate": 0.00017352073572791948
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 69,
+                "flag_rate": 0.7931034482758621
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 47,
+                "flag_rate": 0.5108695652173914
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 24,
+                "flag_rate": 0.5853658536585366
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 22,
+                "flag_rate": 0.22448979591836735
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 104,
+                "flag_rate": 0.9369369369369369
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 85,
+                "flag_rate": 0.9770114942528736
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 90,
+                "flag_rate": 0.9473684210526315
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 85,
+                "flag_rate": 0.8173076923076923
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 0,
+                "flag_rate": 0.0
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 1,
+                "flag_rate": 0.08333333333333333
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=1/1000_val": {
+            "threshold": 0.9021402517353667,
+            "tp": 834,
+            "fp": 5,
+            "fn": 226,
+            "tn": 5758,
+            "precision": 0.9940405244338498,
+            "recall": 0.7867924528301887,
+            "f1": 0.8783570300157978,
+            "fa_per_1000_benign": 0.8676036786395974,
+            "accuracy": 0.9661439249596951,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 5,
+                "flag_rate": 0.0008676036786395974
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 78,
+                "flag_rate": 0.896551724137931
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 82,
+                "flag_rate": 0.8913043478260869
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 109,
+                "flag_rate": 0.9819819819819819
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 99,
+                "flag_rate": 0.9519230769230769
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 1,
+                "flag_rate": 0.004975124378109453
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 12,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          },
+          "fa<=10/1000_val": {
+            "threshold": 0.5382424492727409,
+            "tp": 884,
+            "fp": 76,
+            "fn": 176,
+            "tn": 5687,
+            "precision": 0.9208333333333333,
+            "recall": 0.8339622641509434,
+            "f1": 0.8752475247524751,
+            "fa_per_1000_benign": 13.187575915321881,
+            "accuracy": 0.9630660999560311,
+            "per_label": [
+              {
+                "label": "Benign",
+                "n": 5763,
+                "flagged": 76,
+                "flag_rate": 0.01318757591532188
+              },
+              {
+                "label": "Bot",
+                "n": 87,
+                "flagged": 79,
+                "flag_rate": 0.9080459770114943
+              },
+              {
+                "label": "Brute Force -Web",
+                "n": 92,
+                "flagged": 88,
+                "flag_rate": 0.9565217391304348
+              },
+              {
+                "label": "Brute Force -XSS",
+                "n": 41,
+                "flagged": 41,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-HOIC",
+                "n": 98,
+                "flagged": 98,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDOS attack-LOIC-UDP",
+                "n": 82,
+                "flagged": 82,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DDoS attacks-LOIC-HTTP",
+                "n": 111,
+                "flagged": 111,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-GoldenEye",
+                "n": 87,
+                "flagged": 87,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Hulk",
+                "n": 95,
+                "flagged": 95,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-SlowHTTPTest",
+                "n": 2,
+                "flagged": 2,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "DoS attacks-Slowloris",
+                "n": 104,
+                "flagged": 103,
+                "flag_rate": 0.9903846153846154
+              },
+              {
+                "label": "FTP-BruteForce",
+                "n": 1,
+                "flagged": 1,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "Infilteration",
+                "n": 201,
+                "flagged": 38,
+                "flag_rate": 0.1890547263681592
+              },
+              {
+                "label": "SQL Injection",
+                "n": 12,
+                "flagged": 12,
+                "flag_rate": 1.0
+              },
+              {
+                "label": "SSH-Bruteforce",
+                "n": 47,
+                "flagged": 47,
+                "flag_rate": 1.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "experiment_seconds": 13.258042100002058
+  },
+  "environment": {
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.10.8",
+    "cpu": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+    "logical_cpus": 16,
+    "versions": {
+      "scikit-learn": "1.7.2",
+      "lightgbm": "4.7.0",
+      "polars": "1.44.2",
+      "pyarrow": "25.0.1",
+      "numpy": "2.2.6",
+      "psycopg": "3.3.6"
+    },
+    "seed": 20180214,
+    "ram_gb": 31.9,
+    "gpu": "NVIDIA GeForce RTX 2080 (kullanılmadı; eğitim CPU'da)"
+  },
+  "quick": true
+}

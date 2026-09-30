@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/raw/
+data/processed/
+models/
+*.parquet
+.env
+reports/*.log
+reports/results/*_ids_test*.json
+reports/ids_test*/

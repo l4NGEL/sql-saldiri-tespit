@@ -1,0 +1,97 @@
+-- leakage_overlap
+-- Test satırlarının eğitimde birebir görülen özellik vektörü oranı (hash join)
+SELECT count(*), count(t.fv_hash)
+FROM clean.flows c JOIN features.flow_features f USING (capture_day, flow_id)
+LEFT JOIN features.train_fv_temporal t ON t.fv_hash = c.fv_hash
+WHERE f.split_temporal = 'test'
+
+Finalize Aggregate  (cost=1252366.93..1252366.94 rows=1 width=16) (actual time=6081.245..6137.040 rows=1 loops=1)
+  Buffers: shared hit=304 read=1049921
+  ->  Gather  (cost=1252366.50..1252366.91 rows=4 width=16) (actual time=6041.112..6137.028 rows=5 loops=1)
+        Workers Planned: 4
+        Workers Launched: 4
+        Buffers: shared hit=304 read=1049921
+        ->  Partial Aggregate  (cost=1251366.50..1251366.51 rows=1 width=16) (actual time=6025.239..6025.248 rows=1 loops=5)
+              Buffers: shared hit=304 read=1049921
+              ->  Parallel Hash Left Join  (cost=400174.27..1250384.92 rows=196316 width=8) (actual time=1777.323..5973.426 rows=560912 loops=5)
+                    Hash Cond: (c.fv_hash = t.fv_hash)
+                    Buffers: shared hit=304 read=1049921
+                    ->  Parallel Hash Join  (cost=329744.24..1179439.56 rows=196316 width=8) (actual time=1050.434..4869.252 rows=560912 loops=5)
+                          Hash Cond: ((c.capture_day = f.capture_day) AND (c.flow_id = f.flow_id))
+                          Buffers: shared hit=56 read=1018881
+                          ->  Parallel Append  (cost=0.00..819561.44 rows=3952412 width=20) (actual time=0.041..2525.621 rows=3161802 loops=5)
+                                Buffers: shared read=760035
+                                ->  Parallel Seq Scan on flows_20180220 c_4  (cost=0.00..399909.51 rows=1987351 width=20) (actual time=0.053..1066.219 rows=1589749 loops=5)
+                                      Buffers: shared read=380036
+                                ->  Parallel Seq Scan on flows_20180221 c_5  (cost=0.00..54127.48 rows=257748 width=20) (actual time=0.047..836.869 rows=1031018 loops=1)
+                                      Buffers: shared read=51550
+                                ->  Parallel Seq Scan on flows_20180215 c_2  (cost=0.00..52580.34 rows=261534 width=20) (actual time=0.035..881.702 rows=1046154 loops=1)
+                                      Buffers: shared read=49965
+                                ->  Parallel Seq Scan on flows_20180223 c_7  (cost=0.00..52436.90 rows=261490 width=20) (actual time=0.034..797.817 rows=1045961 loops=1)
+                                      Buffers: shared read=49822
+                                ->  Parallel Seq Scan on flows_20180222 c_6  (cost=0.00..52403.17 rows=261316 width=20) (actual time=0.024..267.185 rows=348429 loops=3)
+                                      Buffers: shared read=49790
+                                ->  Parallel Seq Scan on flows_20180302 c_10  (cost=0.00..52288.79 rows=260779 width=20) (actual time=0.019..407.858 rows=521558 loops=2)
+                                      Buffers: shared read=49681
+                                ->  Parallel Seq Scan on flows_20180216 c_3  (cost=0.00..47228.45 rows=225245 width=20) (actual time=0.020..336.260 rows=450494 loops=2)
+                                      Buffers: shared read=44976
+                                ->  Parallel Seq Scan on flows_20180214 c_1  (cost=0.00..41632.50 rows=205750 width=20) (actual time=0.008..602.171 rows=822942 loops=1)
+                                      Buffers: shared read=39575
+                                ->  Parallel Seq Scan on flows_20180228 c_8  (cost=0.00..30133.45 rows=148445 width=20) (actual time=0.008..404.190 rows=593780 loops=1)
+                                      Buffers: shared read=28649
+                                ->  Parallel Seq Scan on flows_20180301 c_9  (cost=0.00..17058.80 rows=106780 width=20) (actual time=0.015..236.497 rows=331017 loops=1)
+                                      Buffers: shared read=15991
+                          ->  Parallel Hash  (cost=319260.05..319260.05 rows=698946 width=12) (actual time=1048.254..1048.258 rows=560912 loops=5)
+                                Buckets: 4194304  Batches: 1  Memory Usage: 164448kB
+                                Buffers: shared read=258842
+                                ->  Parallel Append  (cost=0.00..319260.05 rows=698946 width=12) (actual time=6.376..770.120 rows=560912 loops=5)
+                                      Buffers: shared read=258842
+                                      ->  Parallel Seq Scan on flow_features_20180220 f_4  (cost=0.00..154842.40 rows=351991 width=12) (actual time=33.348..418.037 rows=282061 loops=5)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 1307688
+                                            Buffers: shared read=130003
+                                      ->  Parallel Seq Scan on flow_features_20180221 f_5  (cost=0.00..21375.33 rows=73502 width=12) (actual time=0.069..204.812 rows=230179 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 800839
+                                            Buffers: shared read=17218
+                                      ->  Parallel Seq Scan on flow_features_20180215 f_2  (cost=0.00..21297.36 rows=53770 width=12) (actual time=20.781..198.857 rows=167168 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 878986
+                                            Buffers: shared read=17079
+                                      ->  Parallel Seq Scan on flow_features_20180302 f_10  (cost=0.00..21290.11 rows=51056 width=12) (actual time=9.466..180.410 rows=160927 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 882189
+                                            Buffers: shared read=17084
+                                      ->  Parallel Seq Scan on flow_features_20180223 f_7  (cost=0.00..21171.58 rows=58855 width=12) (actual time=0.033..190.395 rows=183272 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 862689
+                                            Buffers: shared read=16954
+                                      ->  Parallel Seq Scan on flow_features_20180222 f_6  (cost=0.00..21162.87 rows=69034 width=12) (actual time=5.509..88.501 rows=71082 loops=3)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 277348
+                                            Buffers: shared read=16948
+                                      ->  Parallel Seq Scan on flow_features_20180216 f_3  (cost=0.00..18702.02 rows=42424 width=12) (actual time=17.909..108.194 rows=66684 loops=2)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 383810
+                                            Buffers: shared read=15069
+                                      ->  Parallel Seq Scan on flow_features_20180214 f_1  (cost=0.00..16736.31 rows=42589 width=12) (actual time=14.057..137.451 rows=131818 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 691124
+                                            Buffers: shared read=13418
+                                      ->  Parallel Seq Scan on flow_features_20180228 f_8  (cost=0.00..12116.27 rows=37925 width=12) (actual time=5.389..89.961 rows=117581 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 476199
+                                            Buffers: shared read=9722
+                                      ->  Parallel Seq Scan on flow_features_20180301 f_9  (cost=0.00..7071.05 rows=23934 width=12) (actual time=0.032..53.077 rows=56696 loops=1)
+                                            Filter: (split_temporal = 'test'::text)
+                                            Rows Removed by Filter: 274321
+                                            Buffers: shared read=5347
+                    ->  Parallel Hash  (cost=48546.68..48546.68 rows=1750668 width=8) (actual time=719.470..719.471 rows=1400527 loops=5)
+                          Buckets: 8388608  Batches: 1  Memory Usage: 339584kB
+                          Buffers: shared read=31040
+                          ->  Parallel Seq Scan on train_fv_temporal t  (cost=0.00..48546.68 rows=1750668 width=8) (actual time=0.039..125.491 rows=1400527 loops=5)
+                                Buffers: shared read=31040
+Planning:
+  Buffers: shared hit=328 read=77 dirtied=2
+Planning Time: 6.221 ms
+Execution Time: 6137.214 ms

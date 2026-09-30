@@ -1,0 +1,67 @@
+-- pruning_non_key
+-- Aynı sonuç, bölüm anahtarı olmayan ifadeyle: tüm bölümler taranır. 2018-02-21
+SELECT label, count(*) FROM clean.flows WHERE ts::date = DATE '2018-02-21' GROUP BY 1
+
+Finalize GroupAggregate  (cost=822190.58..822346.04 rows=14 width=16) (actual time=1013.200..1024.786 rows=3 loops=1)
+  Group Key: flows.label
+  Buffers: shared hit=67689 read=692494 written=2
+  ->  Gather Merge  (cost=822190.58..822345.62 rows=56 width=16) (actual time=1013.194..1024.778 rows=3 loops=1)
+        Workers Planned: 4
+        Workers Launched: 4
+        Buffers: shared hit=67689 read=692494 written=2
+        ->  Partial GroupAggregate  (cost=821190.52..821338.89 rows=14 width=16) (actual time=878.617..892.482 rows=1 loops=5)
+              Group Key: flows.label
+              Buffers: shared hit=67689 read=692494 written=2
+              ->  Sort  (cost=821190.52..821239.93 rows=19763 width=8) (actual time=870.809..878.167 rows=206204 loops=5)
+                    Sort Key: flows.label
+                    Sort Method: quicksort  Memory: 25kB
+                    Buffers: shared hit=67689 read=692494 written=2
+                    Worker 0:  Sort Method: quicksort  Memory: 25kB
+                    Worker 1:  Sort Method: quicksort  Memory: 51158kB
+                    Worker 2:  Sort Method: quicksort  Memory: 25kB
+                    Worker 3:  Sort Method: quicksort  Memory: 25kB
+                    ->  Parallel Append  (cost=0.00..819780.38 rows=19763 width=8) (actual time=690.660..842.137 rows=206204 loops=5)
+                          Buffers: shared hit=67541 read=692494 written=2
+                          ->  Parallel Seq Scan on flows_20180220 flows_4  (cost=0.00..409846.26 rows=9937 width=8) (actual time=329.619..329.619 rows=0 loops=5)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 1589749
+                                Buffers: shared read=380036
+                          ->  Parallel Seq Scan on flows_20180221 flows_5  (cost=0.00..55416.22 rows=1289 width=13) (actual time=0.010..303.977 rows=1031018 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Buffers: shared hit=51550
+                          ->  Parallel Seq Scan on flows_20180215 flows_2  (cost=0.00..53888.01 rows=1308 width=7) (actual time=356.179..356.179 rows=0 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 1046154
+                                Buffers: shared read=49965 written=1
+                          ->  Parallel Seq Scan on flows_20180223 flows_7  (cost=0.00..53744.35 rows=1308 width=7) (actual time=370.551..370.551 rows=0 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 1045961
+                                Buffers: shared read=49822
+                          ->  Parallel Seq Scan on flows_20180222 flows_6  (cost=0.00..53709.75 rows=1306 width=7) (actual time=109.356..109.356 rows=0 loops=3)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 348429
+                                Buffers: shared read=49790
+                          ->  Parallel Seq Scan on flows_20180302 flows_10  (cost=0.00..53592.68 rows=1304 width=6) (actual time=171.013..171.021 rows=0 loops=2)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 521558
+                                Buffers: shared read=49681
+                          ->  Parallel Seq Scan on flows_20180216 flows_3  (cost=0.00..48354.67 rows=1126 width=12) (actual time=155.744..155.744 rows=0 loops=2)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 450494
+                                Buffers: shared read=44976 written=1
+                          ->  Parallel Seq Scan on flows_20180214 flows_1  (cost=0.00..42661.25 rows=1029 width=8) (actual time=240.883..240.883 rows=0 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 822942
+                                Buffers: shared read=39575
+                          ->  Parallel Seq Scan on flows_20180228 flows_8  (cost=0.00..30875.67 rows=742 width=7) (actual time=172.613..172.613 rows=0 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 593780
+                                Buffers: shared read=28649
+                          ->  Parallel Seq Scan on flows_20180301 flows_9  (cost=0.00..17592.70 rows=534 width=8) (actual time=65.262..65.262 rows=0 loops=1)
+                                Filter: ((ts)::date = '2018-02-21'::date)
+                                Rows Removed by Filter: 331017
+                                Buffers: shared hit=15991
+Planning:
+  Buffers: shared hit=38 read=6
+Planning Time: 0.463 ms
+Execution Time: 1024.823 ms
