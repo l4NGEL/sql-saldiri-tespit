@@ -31,5 +31,16 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+  # Spark işleri: docker compose run --rm spark python -m ids spark features
+  spark:
+    build: {context: ., dockerfile: Dockerfile.spark}
+    image: ids-spark
+    profiles: ["spark"]
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      IDS_DB: ${IDS_DB:-ids}
+      IDS_SPARK_MEMORY: ${IDS_SPARK_MEMORY:-8g}
 volumes:
   ids-pgdata:

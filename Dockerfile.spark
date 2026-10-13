@@ -1,0 +1,10 @@
+# Spark işleri (python -m ids spark ..., python -m ids drift) için çalışma ortamı.
+# Veritabanı gerekmez: girdi, ana makinede `python -m ids lake` ile üretilen data/lake/ dizinidir.
+FROM python:3.10-slim-bookworm
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openjdk-17-jre-headless procps libgomp1 \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY requirements.lock requirements-spark.txt ./
+RUN pip install --no-cache-dir -r requirements.lock -r requirements-spark.txt
+ENV PYTHONIOENCODING=utf-8 PYTHONUNBUFFERED=1

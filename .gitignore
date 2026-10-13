@@ -11,3 +11,4 @@ models/*
 reports/*.log
 reports/results/*_ids_test*.json
 reports/ids_test*/
+data/lake/

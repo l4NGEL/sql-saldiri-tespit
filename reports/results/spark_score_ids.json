@@ -1,0 +1,21 @@
+{
+  "database": "ids",
+  "rows": 15809010,
+  "seconds": 311.7668678770001,
+  "rows_per_s": 50707.79363969187,
+  "test": {
+    "rows": 2804561,
+    "pr_auc": 0.9902590827450959,
+    "recall": 0.9409317234538462,
+    "fa_per_1000_benign": 1.6499287132267755,
+    "threshold": 0.7580282884327914
+  },
+  "trained_model_test_summary": {
+    "precision": 0.989842731976118,
+    "recall": 0.9409317234538462,
+    "f1": 0.9647677129011368,
+    "fa_per_1000_benign": 1.6499287132267755,
+    "pr_auc": 0.9902590827450959
+  },
+  "matches_training_eval": true
+}

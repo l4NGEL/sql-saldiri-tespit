@@ -29,6 +29,17 @@ def main() -> None:
     e = sub.add_parser("export", help="SQL eğitim sorgusunu Parquet'e aktar")
     e.add_argument("--scheme", default="temporal", choices=["temporal", "random"])
 
+    sub.add_parser("lake", help="clean.flows -> gün bölümlü Parquet (Spark girdisi) + parite için SQL özellikleri")
+
+    sp = sub.add_parser("spark", help="PySpark: özellik hattı + SQL paritesi, ya da toplu skorlama")
+    sp.add_argument("step", choices=["features", "score", "bench"])
+    sp.add_argument("--day", default="2018-03-01", help="bench: kıyaslanacak gün")
+    sp.add_argument("--timeout", type=int, default=900, help="bench: rangeBetween için süre sınırı (s)")
+    sp.add_argument("--naive-bench", action="store_true",
+                    help="rangeBetween sürümünü de çalıştırıp süreyi ölç (yalnızca küçük veride)")
+
+    sub.add_parser("drift", help="PSI drift analizi: görülmemiş gün doğrulaması + ana model izleme (Spark)")
+
     t = sub.add_parser("train", help="Modelleri eğit, eşiği doğrulamada seç, testte değerlendir")
     t.add_argument("--experiment", default="main",
                    help="main, random_split, ablation, multiclass, lodo, all ya da virgüllü liste (ör. multiclass,lodo)")
@@ -64,6 +75,20 @@ def main() -> None:
     elif args.cmd == "export":
         from . import export
         export.run(args.scheme)
+    elif args.cmd == "lake":
+        from . import lake
+        lake.run()
+    elif args.cmd == "spark":
+        from . import spark_job
+        if args.step == "features":
+            spark_job.run_features(args.naive_bench)
+        elif args.step == "score":
+            spark_job.run_score()
+        else:
+            spark_job.run_window_bench(args.day, args.timeout)
+    elif args.cmd == "drift":
+        from . import drift
+        drift.run()
     elif args.cmd == "train":
         from . import train
         train.run(args.experiment, quick=args.quick)

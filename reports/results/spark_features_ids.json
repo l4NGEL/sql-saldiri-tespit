@@ -1,0 +1,139 @@
+{
+  "database": "ids",
+  "rows": 15809010,
+  "spark": "3.5.6",
+  "master": "local[*]",
+  "cpu": 16,
+  "prefix_seconds": 252.62006062800003,
+  "rows_written": 15809010,
+  "parity": {
+    "rows_sql": 15809010,
+    "rows_spark": 15809010,
+    "rows_joined": 15809010,
+    "rel_tol": 1e-05,
+    "features": {
+      "duration_s": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "fwd_bytes_per_pkt": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "bwd_bytes_per_pkt": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 4071685
+      },
+      "bwd_fwd_byte_ratio": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 9.313225746154785e-10,
+        "nulls": 0
+      },
+      "bwd_fwd_pkt_ratio": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "fwd_payload_share": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 238221
+      },
+      "log_total_bytes": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 1.1071979046501094e-07,
+        "nulls": 0
+      },
+      "flow_iat_cv": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 93530
+      },
+      "active_idle_ratio": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 1.191622985740086e-07,
+        "nulls": 0
+      },
+      "no_response": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "zero_duration": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "well_known_port": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "w10_port_n": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "w60_port_n": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "w60_all_n": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 0
+      },
+      "w60_port_share": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 130
+      },
+      "w60_port_mean_fwd_pkts": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 1517817
+      },
+      "w60_port_mean_duration_s": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 1517817
+      },
+      "w60_port_noresp_share": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 1517817
+      },
+      "w60_port_rst_share": {
+        "null_mismatch": 0,
+        "over_tol": 0,
+        "max_rel_diff": 0.0,
+        "nulls": 1517817
+      }
+    },
+    "all_equal": true
+  },
+  "parity_seconds": 36.116476837999926
+}

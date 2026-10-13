@@ -14,12 +14,13 @@ performans ölçümleri ve sınırlamalar. Buradaki her sayı gerçekten çalı�
 6. [SQL ile özellik üretimi](#sql-ile-özellik-üretimi)
 7. [Deney yöntemi](#deney-yöntemi)
 8. [Sonuçlar](#sonuçlar)
-9. [Performans ölçümleri](#performans-ölçümleri)
-10. [Tahmin API'si](#tahmin-apisi)
-11. [Testler](#testler)
-12. [Sınırlamalar](#sınırlamalar)
-13. [Proje yapısı](#proje-yapısı)
-14. [Kaynak ve atıf](#kaynak-ve-atıf)
+9. [PySpark hattı ve drift izleme](#pyspark-hattı-ve-drift-izleme)
+10. [Performans ölçümleri](#performans-ölçümleri)
+11. [Tahmin API'si](#tahmin-apisi)
+12. [Testler](#testler)
+13. [Sınırlamalar](#sınırlamalar)
+14. [Proje yapısı](#proje-yapısı)
+15. [Kaynak ve atıf](#kaynak-ve-atıf)
 
 ---
 
@@ -211,6 +212,11 @@ Adım adım (her komut ayrı çalıştırılabilir ve tekrar çalıştırılabil
 | `python -m ids bench` | performans karşılaştırmaları, `EXPLAIN ANALYZE`, API gecikmesi |
 | `python -m ids report` | `meta` + deney çıktılarından `reports/*.md` |
 | `python -m ids serve` | FastAPI servisi (`127.0.0.1:8000`) |
+| `python -m ids lake` | `clean.flows` → gün bölümlü Parquet (Spark girdisi) + parite için SQL özellikleri |
+| `python -m ids spark features` | (konteynerde) 20 özelliği Spark'ta üretir, SQL ile satır satır karşılaştırır |
+| `python -m ids spark score` | (konteynerde) tüm akışları Spark'ta skorlar, test metriklerini yeniden üretir |
+| `python -m ids spark bench --day G` | (konteynerde) tek günde iki pencere yöntemini karşılaştırır |
+| `python -m ids drift` | (konteynerde) PSI drift analizi, `reports/drift.md` |
 
 ---
 
@@ -475,6 +481,194 @@ tahmini p50 0,076 ms, toplu tahmin ~260 bin akış/s.
 
 ---
 
+## PySpark hattı ve drift izleme
+
+SQL hattının yanına iki şey eklendi: (1) aynı 20 özelliği dağıtık bir motorda üreten ve SQL ile
+**satır satır aynı** sonucu verdiği doğrulanan bir PySpark hattı ve Spark üzerinde toplu skorlama;
+(2) etiket gelmeden modelin kötüleştiği günlerin fark edilip edilemeyeceğini ölçen bir drift analizi.
+Spark işleri `Dockerfile.spark` (Linux, JDK 17, Spark 3.5.6 `local[*]`) içinde koşar; veritabanı
+gerekmez, girdi `python -m ids lake` ile üretilen Parquet dosyalarıdır. (Windows'ta Spark, Hadoop'un
+`winutils`/`hadoop.dll` ikilileri olmadan yerel diske erişemiyor; konteyner bu yüzden.)
+
+```bash
+python -m ids lake
+```
+
+```bash
+docker compose --profile spark build spark
+```
+
+```bash
+docker compose run --rm spark python -m ids spark features
+```
+
+```bash
+docker compose run --rm spark python -m ids spark score
+```
+
+```bash
+docker compose run --rm spark python -m ids drift
+```
+
+### Veri akışı
+
+```mermaid
+flowchart LR
+    PG[(clean.flows<br/>15,8 M)] -->|lake: COPY -> Parquet| L[clean_flows/<br/>capture_day=...]
+    PG -->|yalnız parite için| Q[sql_features/]
+    L -->|Spark: 12 satır + 8 pencere özelliği| F[spark_features/]
+    F -.->|flow_id ile satır satır| Q
+    L --> S[scores/]
+    F -->|mapInPandas + LightGBM| S
+    S --> D[drift raporu]
+    F -->|tek toplama geçişi| D
+```
+
+### Özellik paritesi (tam veri)
+
+Spark çıktısı, `features.flow_features` ile `flow_id` üzerinden tam dış birleştirmeyle karşılaştırılır:
+satır sayıları, her özellikte NULL'ların yeri ve sayısal fark (`|spark − sql| ≤ 1e-5 · max(1, |sql|)`).
+
+| | Sonuç |
+|---|---|
+| Satır (SQL / Spark / birleşim) | 15.809.010 / 15.809.010 / 15.809.010 |
+| NULL yeri farklı olan değer (20 özellik) | 0 |
+| Toleransı aşan değer | 0 |
+| En büyük göreli fark | 1,2·10⁻⁷ (`active_idle_ratio`, float32 yuvarlaması) |
+| Pencere sayımları (`w10_port_n`, `w60_port_n`, `w60_all_n`) | birebir aynı |
+
+Sonuç: [`reports/results/spark_features_ids.json`](../reports/results/spark_features_ids.json).
+
+### Pencere özellikleri: `rangeBetween` yerine önek toplamı
+
+SQL'deki `RANGE BETWEEN interval '60 s' PRECEDING AND CURRENT ROW` Spark'ta doğrudan
+`rangeBetween(-60e6, 0)` olarak yazılabilir ve anlamca aynıdır. Ancak Spark sınırlı kayan çerçevede
+toplamı her satırda pencerenin tamamı üzerinden yeniden hesaplar (PostgreSQL'deki `sum(real)`
+sorununun aynısı; bkz. [Performans ölçümleri](#performans-ölçümleri)). Bunun yerine her pencere iki
+birikimli toplamın farkı olarak hesaplanır:
+
+    pencere(t) = #{bitiş ≤ t} − #{bitiş < t − L}
+
+Her akış için `t − L` anında bir "sonda" satırı eklenir. Veri satırının sıralama anahtarı `2t+1`,
+sondanınki `2(t−L)` olduğundan veri satırı kendisiyle aynı anda biten tüm akışları kapsar (SQL'deki
+`CURRENT ROW` eşleri), sonda ise tam `t − L` anında bitenleri dışarıda bırakır (yani onlar pencereye
+dahil kalır). Ardından `UNBOUNDED PRECEDING .. CURRENT ROW` birikimli toplamı alınır; bu çerçeve
+Spark'ta artımlıdır. Doğruluk üç yoldan test edilir: önek toplamı = `rangeBetween` = Python kaba
+kuvvet (eşzamanlı bitişler, NULL'lar, birden çok gün ve port içeren sentetik veriyle,
+`tests/test_spark.py`).
+
+| Yalnızca pencere özellikleri, tek gün (`python -m ids spark bench --day ...`) | `rangeBetween` | Önek toplamı |
+|---|---|---|
+| 01-03 (331 bin akış, seyrek trafik) | 9,4 s | 6,9 s |
+| 21-02 (1,03 M akış, HOIC: tek porta 60 s'de on binlerce akış) | **900 s'de bitmedi** (iptal) | **14,2 s** |
+
+### Süreler (Docker, 16 çekirdek, 10 GB sürücü belleği)
+
+| Adım | Süre | Not |
+|---|---|---|
+| `lake`: PostgreSQL → Parquet | 314 s | 2,0 GB (clean 1,4 · parite için SQL özellikleri 0,5) |
+| 20 özellik, 15,8 M akış | 253 s | yazma dahil |
+| Parite denetimi | 36 s | |
+| Toplu skorlama, 15,8 M akış | 312 s | ~50.700 akış/s; LightGBM her görevde tek iş parçacığı |
+| Drift: tüm özelliklerin bölme sayımları | 863 s | 90 özellik × ≤ 12 bölme ≈ 1.000 toplama sütunu, tek geçiş |
+
+### Spark'ta toplu skorlama
+
+Model dosyası `SparkFiles` ile dağıtılır, her Python işçisi onu bir kez yükler (`mapInPandas`). Test
+bölümünde, eğitim sırasında yapılan değerlendirmenin aynısı çıkar: PR-AUC **0,9903**, yakalama
+**0,9409**, **1,65** yanlış alarm / 1.000 normal akış (model kartıyla `rtol=1e-4` içinde eşit). Bu,
+Spark özellikleri + Spark skorlamasının eğitim/servis kayması yaratmadığını uçtan uca gösterir.
+Sonuç: [`reports/results/spark_score_ids.json`](../reports/results/spark_score_ids.json).
+
+### Drift: yöntem
+
+PSI (Population Stability Index), referansın ondalıklarıyla kurulan bölmelerde hesaplanır (NULL ayrı
+bölme, boş bölme 10⁻⁴ ile yumuşatılır). Yaygın eşikler: > 0,1 orta, > 0,25 belirgin kayma (sektör
+geleneği, istatistiksel test değil). Gün başına özet: ortalama PSI ve ana modelin gain önem
+dereceleriyle ağırlıklandırılmış PSI. Tüm sayımlar `(gün, bölüm, saldırı mı)` gruplarında tek Spark
+geçişiyle çıkarılır; farklı referans/hedef kombinasyonları bu sayımlardan toplanır.
+
+Doğrulama sorusu: drift sinyali, gün dışarıda bırakma (LODO) deneyinde **gerçekten ölçülmüş**
+performans düşüşüyle ilişkili mi? Her gün için referans = diğer 9 günün eğitim bölümü (LODO modelinin
+eğitildiği veri), hedef = o günün tüm akışları (LODO'nun test ettiği veri).
+
+### Drift: sonuçlar
+
+![Drift ve görülmemiş gün performansı](img/drift.png)
+
+| Gün | Saldırılar | Ağırlıklı PSI (tüm akışlar) | Ağırlıklı PSI (yalnız normal) | LODO PR-AUC | LODO yakalama |
+|---|---|---|---|---|---|
+| 14-02 | FTP/SSH BruteForce | 0,73 | 0,58 | 0,704 | 0,302 |
+| 15-02 | DoS GoldenEye, Slowloris | 0,59 | 0,53 | 0,366 | 0,207 |
+| 16-02 | DoS Hulk, SlowHTTPTest | **4,32** | **6,41** | 1,000 | 0,979 |
+| 20-02 | DDoS LOIC-HTTP | 1,25 | 1,32 | 0,902 | 0,500 |
+| 21-02 | DDoS HOIC, LOIC-UDP | **4,83** | **6,23** | 1,000 | 0,594 |
+| 22-02 | Web BF, XSS, SQLi | 0,73 | 0,58 | 0,344 | 0,265 |
+| 23-02 | Web BF, XSS, SQLi | 0,79 | 0,62 | 0,309 | 0,242 |
+| 28-02 | Infiltration | 0,85 | 0,88 | **0,096** | 0,081 |
+| 01-03 | Infiltration | 0,98 | 0,91 | 0,358 | 0,003 |
+| 02-03 | Bot | 0,72 | 0,63 | 0,701 | 0,009 |
+
+Spearman sıra korelasyonu (N = 10 gün, küçük örneklem): ortalama PSI ~ LODO PR-AUC
+**ρ = +0,75 (p = 0,013)**; ağırlıklı PSI ~ PR-AUC ρ = +0,43 (p = 0,21); yalnız normal akışlarda
+ağırlıklı PSI ~ PR-AUC ρ = +0,56 (p = 0,09). Tam tablo: [`reports/drift.md`](../reports/drift.md).
+
+Okuma:
+- **Klasik eşikle izleme her gün alarm verirdi.** 10 günün hepsinde ağırlıklı PSI 0,25'in üstünde.
+  En çok kayan özellikler hacim ölçen pencere sayılarıdır (`w60_all_n`, `w60_port_n`, `w10_port_n`);
+  bunlar saldırısız trafikte de günden güne değişir. Bu veride "olağan" gün-gün kayması 0,5–1,0
+  düzeyinde; eşik geçmiş günlerin dağılımından kalibre edilmeden PSI alarmı işe yaramaz.
+- **Korelasyonun işareti ters.** Drift arttıkça LODO performansı düşmüyor, artıyor. En büyük kayma
+  16-02 ve 21-02'de (DoS/DDoS selleri) ve model o günlerde kusursuz sıralıyor; en kötü gün (28-02,
+  Infiltration, rastgeleden kötü) sıradan bir drift değeri gösteriyor. Hacim bırakan saldırı hem
+  dağılımı kaydırır hem kolay yakalanır; sessiz saldırı ikisini de yapmaz. Bu veride girdi drift'i
+  bir **model kalitesi** alarmı değil, bir **trafik anomalisi** alarmıdır.
+- **Drift analizi bir etiket sorununu ortaya çıkardı.** 16-02 ve 21-02'de *yalnız normal* akışlardaki
+  kayma bile 6'nın üstünde. Bakınca: o günlerde "Benign" etiketli akışların %99,9 ve %99,4'ü geçici
+  portlara (≥ 32768) gidiyor ve %99'unun en büyük paket boyu aynı (935 bayt); diğer günlerde normal
+  trafiğin ~%30'unu oluşturan DNS bu iki günde hiç yok. Bunlar büyük olasılıkla saldırı altındaki web
+  sunucusunun saldırgana verdiği **yanıt akışlarıdır** ve "Benign" etiketlenmiştir. Bu iki günde model
+  gerçek normal trafiği değil, saldırının ters yönünü ayırt ediyor; o günlerin LODO PR-AUC'u (1,000)
+  bu yüzden iyimserdir.
+
+### Ana model izleme: skor drift'i
+
+Etiketsiz ikinci sinyal: modelin skor dağılımı. Referans = **aynı günün** doğrulama bölümü (zamanca
+testten hemen önce gelen dilim), hedef = o günün test bölümü. (İlk sürümde referans tüm günlerin
+birleşik doğrulama skorlarıydı; o zaman skor PSI'ı aslında günün saldırı payını ölçüyordu ve her gün
+1,4–6,9 çıkıyordu.)
+
+| Gün | Skor PSI | Alarm oranı val → test | Saldırı payı val → test | Yakalama | YA/1000 |
+|---|---|---|---|---|---|
+| 14-02 | 0,005 | 0,201 → 0,225 | 0,201 → 0,225 | 1,000 | 0,15 |
+| 15-02 | 0,004 | 0,043 → 0,047 | 0,043 → 0,047 | 0,987 | 0,03 |
+| 16-02 | 0,018 | 0,500 → 0,533 | 0,500 → 0,533 | 1,000 | 0,00 |
+| 20-02 | 0,010 | 0,076 → 0,075 | 0,076 → 0,075 | 1,000 | 0,02 |
+| 21-02 | **4,925** | 0,493 → 0,482 | 0,493 → 0,483 | 0,999 | 0,01 |
+| 22-02 | 0,002 | 0,000 → 0,000 | 0,000 → 0,000 | 0,492 | 0,01 |
+| 23-02 | 0,006 | 0,000 → 0,000 | 0,001 → 0,001 | 0,350 | 0,04 |
+| 28-02 | 0,061 | 0,019 → 0,037 | 0,133 → 0,097 | 0,089 | **31,63** |
+| 01-03 | 0,051 | 0,053 → 0,117 | 0,295 → 0,284 | 0,381 | **12,76** |
+| 02-03 | 0,058 | 0,255 → 0,326 | 0,255 → 0,348 | 0,937 | 0,20 |
+
+Okuma:
+- 21-02 dışındaki en yüksek üç skor PSI'ı (0,05–0,06) modelin zayıf olduğu iki Infiltration günü ve
+  02-03'e ait; Infiltration günlerinde saldırı payı düşer ya da sabit kalırken alarm oranı iki katına
+  çıkıyor. Sinyal doğru
+  yönde ama küçük: hiçbiri 0,1 eşiğini geçmiyor.
+- 22-02 / 23-02'de yakalama 0,49 / 0,35 ama skor PSI'ı ~0. Web saldırıları akışların %0,1'inden azı;
+  skor dağılımında görünmeleri mümkün değil. Az sayıda kaçan saldırı dağılım izlemesine yakalanmaz.
+- 21-02'deki 4,9 bir PSI yapaylığı: saldırı skorlarının medyanı 0,99998'den 0,9917'ye kayıyor, hepsi
+  eşiğin (0,758) çok üstünde, kararlar değişmiyor. Doymuş skorlarda ondalık sınırları 0,9999 civarına
+  sıkıştığı için küçük mutlak kaymalar büyük PSI üretiyor. Skor drift'i karar düzeyinde (alarm oranı)
+  ya da eşik çevresindeki bölmelerle izlenmeli.
+
+Sonuç: bu veride dağılım izleme, etiketli geri bildirimin (ör. örneklenmiş analist incelemesi) yerini
+tutmuyor. Hacim değişimini ve etiket sorunlarını iyi yakalıyor, sessiz saldırıdaki kalite düşüşünü
+yakalamıyor.
+
+---
+
 ## Performans ölçümleri
 
 Tümü `python -m ids bench` ile tam veride ölçüldü ve `meta.benchmarks`'a yazıldı; karşılaştırma günü
@@ -552,13 +746,17 @@ bunun SQL'deki tanımla aynı sonucu verdiği gerçek veride test edilir
 | `test_unit.py` | şema ↔ sütun listesi, eğitim sorgusu sütun sırası, yasaklı alanlar, akış hâlinde okuma (tekrar başlık, bozuk satır), eşik seçimi, YA bütçesi, metrikler, seyreltme, ön işlemenin yalnız train'de öğrenilmesi | — |
 | `test_pipeline_db.py` | sentetik uç durumlarla (1970, öğleden sonra saati, negatif süre, Infinity, tekrar, etiket çelişkisi, tekrar başlık, bozuk satır) her temizleme kuralının sayımı; pencere özelliklerinin yalnızca geçmişi gördüğü (elle ve kaba kuvvetle); ayrım saflığı ve kronoloji | ✓ |
 | `test_sample_e2e.py` | `data/sample` ile ingest → clean → features → export → train → API; SQL↔Python özellik eşliği; train/test kimlik kesişimi yok | ✓ |
+| `test_spark.py` | önek toplamı pencereleri = `rangeBetween` = Python kaba kuvvet (eşzamanlı bitiş, NULL, çok gün/port); Spark satır özellikleri = API'nin Python aynası. Docker'da koşar, Windows'ta atlanır | — |
+| `test_drift.py` | PSI (bilinen değer, simetri, boş bölme), bölme sınırları (ayrık/sabit özellik), NULL bölmesi, eşik sınıfları | — |
 | `test_api.py` | 13 geçersiz girdi durumu, boş oran kabulü, karar = eşik tutarlılığı, açıklama katkılarının logit'e eşitliği, örnek akışların geçerliliği, arayüz, repodaki modelin yasaklı alan kullanmaması | — |
 
 DB testleri ayrı veritabanları (`ids_test`, `ids_test_sample`) kullanır ve PostgreSQL yoksa atlanır.
 Tam veri testi normal test komutunun parçası değildir.
 
-Son çalıştırma (bu makine, PostgreSQL açık): **41 test geçti, 0 atlandı, 0 başarısız**, 28,3 s
-(`test_api` 20, `test_unit` 11, `test_pipeline_db` 6, `test_sample_e2e` 4).
+Son çalıştırma (bu makine, PostgreSQL açık): **48 test geçti, 3 atlandı (Spark), 0 başarısız**, 34,7 s
+(`test_api` 20, `test_unit` 11, `test_drift` 7, `test_pipeline_db` 6, `test_sample_e2e` 4).
+Spark testleri konteynerde: `docker compose run --rm spark python -m pytest tests/test_spark.py
+tests/test_drift.py` → **10 geçti**.
 
 ---
 
@@ -573,6 +771,10 @@ Son çalıştırma (bu makine, PostgreSQL açık): **41 test geçti, 0 atlandı,
   histogramına ve resmi saldırı takvimiyle örtüşmeye dayanıyor.
 - **Etiket kalitesi.** Etiketler saldırgan IP ve zaman aralığına göre atanmış; özellikle Infiltration
   etiketli akışların çoğu saldırı gibi görünmüyor. Bazı etiketler hatalı olabilir.
+- **16-02 ve 21-02'de "Benign" etiketi büyük olasılıkla saldırının yanıt akışları.** Bu iki günde
+  normal etiketli akışların %99'dan fazlası geçici portlara gidiyor ve aynı paket boyunu taşıyor; gerçek
+  arka plan trafiği (DNS vb.) yok. O günlerdeki sonuçlar (LODO PR-AUC 1,000 dahil) iyimser. Drift
+  analizi sırasında bulundu; bkz. [Drift: sonuçlar](#drift-sonuçlar).
 - **Tekrar eden vektörler.** Test akışlarının %26,6'sı eğitimde birebir var; sonuçlar bu yüzden ayrıca
   görülmemiş vektörlerde de verildi, ama yakın-tekrarlar hâlâ iyimserlik katabilir.
 - **Normal trafikte zamansal ayrım tam değil.** Saldırısız bloklar döngüsel atandığı için train, bazı
@@ -591,8 +793,9 @@ Son çalıştırma (bu makine, PostgreSQL açık): **41 test geçti, 0 atlandı,
 ## Proje yapısı
 
 ```
-compose.yml              PostgreSQL 16 (toplu yükleme ayarlarıyla)
-requirements.lock        kilitli bağımlılıklar
+compose.yml              PostgreSQL 16 (toplu yükleme ayarlarıyla) + Spark servisi (profil: spark)
+Dockerfile.spark         Spark işleri için Linux + JDK 17 ortamı
+requirements.lock        kilitli bağımlılıklar (requirements-spark.txt: pyspark)
 ids/                     Python paketi (python -m ids <komut>)
   download.py ingest.py  S3 indirme, akış hâlinde COPY
   pipeline.py            SQL aşamalarını çalıştırır, süreleri meta.timings'e yazar
@@ -602,6 +805,9 @@ ids/                     Python paketi (python -m ids <komut>)
   web/index.html         arayüz (tek dosya, derleme yok)
   demo.py                arayüz için örnek akışlar (data/demo/flows.json)
   bench.py report.py     performans karşılaştırmaları, Markdown raporları
+  lake.py                clean.flows -> gün bölümlü Parquet
+  spark_job.py           PySpark özellik hattı, SQL paritesi, toplu skorlama, pencere kıyası
+  drift.py               PSI drift analizi (Spark), rapor ve grafik
 sql/
   01_schema.sql          şemalar, bölümlü tablolar, meta tabloları
   10_clean.sql           temizleme kuralları, clean.build_day

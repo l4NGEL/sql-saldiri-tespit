@@ -82,6 +82,33 @@ SQL özellikleri PR-AUC'u 0,973'ten 0,990'a çıkarıyor. SQL tarafındaki tasar
 verildi; örneğin kayan pencerede `sum(real)` 10 dakikada bitmezken `sum(bigint)` 1,3 saniyede
 bitiyor. Ayrıntılar: [docs/YONTEM.md](docs/YONTEM.md#performans-ölçümleri).
 
+## PySpark hattı ve drift izleme
+
+Aynı 20 özellik PySpark ile de üretiliyor ve **15,8 milyon akışın tamamında SQL çıktısıyla satır
+satır aynı** (NULL yerleri dahil; en büyük fark 1,2·10⁻⁷, float32 yuvarlaması). Model Spark'ta tüm
+akışları ~50 bin akış/s hızla skorluyor ve test metriklerini birebir yeniden üretiyor (PR-AUC 0,9903).
+
+| | Sonuç |
+|---|---|
+| Spark özellik hattı, 15,8 M akış (16 çekirdek, Docker) | 253 s, SQL ile fark: 0 satır |
+| Yoğun gün (21-02), pencere özellikleri: `rangeBetween` | **900 s'de bitmedi** |
+| Aynı gün, önek toplamı yöntemi | **14,2 s** |
+| Spark'ta toplu skorlama, 15,8 M akış | 312 s, test PR-AUC 0,9903 / yakalama %94,1 (eğitimdekiyle aynı) |
+
+Kayan pencere Spark'ta doğrudan `rangeBetween` ile yazıldığında saldırı yoğun günlerde bitmiyor;
+pencereler önek toplamlarının farkı olarak hesaplanınca 14 saniyeye iniyor.
+
+**Drift:** Her gün için 90 özelliğin PSI'ı (etiketsiz) hesaplandı ve gün dışarıda bırakma deneyinde
+ölçülen gerçek performansla karşılaştırıldı. Sonuç beklenenin tersi: klasik eşikle (PSI > 0,25)
+**her gün** alarm çıkıyor ve en çok kayan günler modelin en iyi olduğu DoS/DDoS günleri
+(ortalama PSI ~ PR-AUC, Spearman ρ = +0,75). Bu veride girdi drift'i model kalitesini değil trafik
+hacmini haber veriyor. Analiz ayrıca bir etiket sorununu ortaya çıkardı: 16-02 ve 21-02'de
+"normal" etiketli akışların %99'u saldırının yanıt akışlarına benziyor.
+
+![Drift ve görülmemiş gün performansı](docs/img/drift.png)
+
+Yöntem, tüm tablolar ve skor drift'i: [docs/YONTEM.md](docs/YONTEM.md#pyspark-hattı-ve-drift-izleme).
+
 ## Tüm hattı çalıştırmak
 
 PostgreSQL 16 Docker'da çalışır:
@@ -103,7 +130,13 @@ Tam veri (S3'ten 6,9 GB indirme, ~16 GB veritabanı, ≥ 24 GB RAM önerilir):
 bash scripts/run_full.sh
 ```
 
-Testler (41 test; veritabanı gerektirenler PostgreSQL yoksa atlanır):
+Spark işleri (girdi: `python -m ids lake` ile üretilen Parquet; Windows'ta da konteynerde koşar):
+
+```bash
+docker compose run --rm spark python -m ids spark features
+```
+
+Testler (51 test; veritabanı gerektirenler PostgreSQL yoksa, Spark testleri Windows'ta atlanır):
 
 ```bash
 .venv/bin/python -m pytest
@@ -114,6 +147,7 @@ Testler (41 test; veritabanı gerektirenler PostgreSQL yoksa atlanır):
 ```
 ids/          Python paketi: içe aktarma, eğitim, API (python -m ids <komut>)
 ids/web/      arayüz (tek HTML dosyası, derleme gerekmez)
+ids/spark_job.py, ids/drift.py   PySpark özellik hattı + skorlama, PSI drift analizi
 sql/          tüm dönüşümler: şema, temizlik, özellikler, ayrımlar, eğitim sorgusu
 models/ids/   eğitilmiş model ve model kartı
 data/sample/  her günden küçük örnek CSV'ler;  data/demo/: arayüzdeki örnek akışlar
@@ -128,6 +162,8 @@ tests/        pytest
 - 7 CSV, Excel'in satır sınırında kesilmiş; bazı saldırıların yalnızca ilk dakikaları var.
 - Saat düzeltmesi bir çıkarımdır; etiketler, özellikle Infiltration'da, hatalı olabilir.
 - Doğrulamada seçilen eşik, zamanla ve günler arasında kayıyor. Canlı kullanımda eşik izlenmeli.
+- 16-02 ve 21-02'de "normal" etiketli akışlar büyük olasılıkla saldırının yanıt akışları; o günlerin
+  sonuçları iyimser.
 
 Tam liste: [docs/YONTEM.md](docs/YONTEM.md#sınırlamalar).
 

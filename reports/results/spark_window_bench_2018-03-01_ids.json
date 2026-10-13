@@ -1,0 +1,16 @@
+{
+  "database": "ids",
+  "day": "2018-03-01",
+  "rows": 331017,
+  "timeout_s": 900,
+  "prefix": {
+    "seconds": 6.895607944999938,
+    "timed_out": false,
+    "error": null
+  },
+  "naive": {
+    "seconds": 9.422796001999814,
+    "timed_out": false,
+    "error": null
+  }
+}
